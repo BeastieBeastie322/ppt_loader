@@ -98,6 +98,14 @@
 
     .slide.hero {
       justify-content: center;
+      background:
+        linear-gradient(105deg, rgba(6, 10, 18, 0.88) 0%, rgba(6, 10, 18, 0.72) 42%, rgba(6, 10, 18, 0.45) 70%, rgba(6, 10, 18, 0.55) 100%),
+        url("assets/slide-01-bg.jpg") center / cover no-repeat;
+    }
+    .slide.hero .hero-title,
+    .slide.hero .eyebrow,
+    .slide.hero .hero-meta {
+      text-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
     }
 
     .eyebrow {
@@ -330,6 +338,12 @@
       height: 100%;
       object-fit: cover;
     }
+    .photo-slot.has-photo {
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.12);
+      padding: 0;
+    }
+    .photo-slot.has-photo::before { display: none; }
 
     .pipeline {
       display: grid;
@@ -645,7 +659,7 @@
       <div class="eyebrow reveal">ТЕХ ГУАП · направление ПТС</div>
       <h1 class="hero-title reveal" style="--d:100ms">Трансляции:<br>зачем и с чем едят</h1>
       <div class="hero-meta reveal" style="--d:260ms">
-        <strong>Тоскин</strong> — руководитель направления ПТС
+        Вводное занятие
       </div>
     </section>
 
@@ -664,9 +678,8 @@
           </div>
         </div>
         <div class="photo-stack reveal" style="--d:220ms">
-          <div class="photo-slot" data-photo="who-1">
-            <div class="label">Фото 1 · команда / эфир</div>
-            <div class="hint">Сюда вставим кадр с площадки</div>
+          <div class="photo-slot has-photo" data-photo="who-1">
+            <img src="assets/who-1.jpg" alt="Команда ТЕХ ГУАП" />
           </div>
           <div class="photo-slot" data-photo="who-2">
             <div class="label">Фото 2 · железо / пульт</div>
@@ -694,9 +707,9 @@
         <div class="tile reveal-scale" style="--d:260ms">
           <h3>Кто мы в кадре</h3>
           <ul>
-            <li>Мы <strong style="color:var(--text)">не операторская служба</strong> по роли</li>
-            <li>Но иногда <strong style="color:var(--text)">выходим операторами</strong> на эфир</li>
-            <li>С камерами работаем <strong style="color:var(--text)">не хуже операторов</strong> — понимаем кадр, свет, экспозицию</li>
+            <li>Мы <strong style="color:var(--text)">не видеооператоры</strong></li>
+            <li>Но иногда <strong style="color:var(--text)">выходим видеооператорами</strong> на эфир</li>
+            <li>С камерами работаем <strong style="color:var(--text)">не хуже видеооператоров</strong> — понимаем кадр, свет, экспозицию</li>
             <li>Наша суперсила — связать камеру, сигнал, микшер и доставку</li>
           </ul>
         </div>
@@ -716,23 +729,6 @@
             <li>Реальный опыт продакшна, а не только теория</li>
           </ul>
         </div>
-      </div>
-    </section>
-
-    <!-- 4. Course overview / plan -->
-    <section class="slide" data-title="О курсе">
-      <div class="eyebrow reveal">Сегодня</div>
-      <h2 class="reveal" style="--d:60ms">Это рассказ о курсе</h2>
-      <p class="sub reveal" style="--d:120ms">Вводное занятие — карта: зачем трансляции, из чего они собираются, кто за что отвечает и где мы работаем.</p>
-      <div class="grid grid-3" style="margin-bottom:1rem">
-        <div class="tile reveal-scale" style="--d:180ms"><div class="num">ПЛОЩАДКА</div><h3>Актовый</h3><p>Крупные эфиры и события университета</p></div>
-        <div class="tile reveal-scale" style="--d:260ms"><div class="num">БАЗА</div><h3>ПТСКА</h3><p>Наша рабочая зона: железо, учебка, сборки</p></div>
-        <div class="tile reveal-scale" style="--d:340ms"><div class="num">ПЛОЩАДКА</div><h3>Точка кипения</h3><p>Ещё одна точка мероприятий и эфиров</p></div>
-      </div>
-      <div class="big-list">
-        <div class="item reveal" style="--d:400ms"><div class="n">01</div><div><h3>Смысл и форматы</h3><p style="color:var(--muted)">Зачем эфир и какими бывают трансляции</p></div></div>
-        <div class="item reveal" style="--d:460ms"><div class="n">02</div><div><h3>Пайплайн и роли</h3><p style="color:var(--muted)">От камеры до зрителя, железо / софт / люди</p></div></div>
-        <div class="item reveal" style="--d:520ms"><div class="n">03</div><div><h3>Дальше по курсу</h3><p style="color:var(--muted)">Инженерная и режиссёрская ветки — без жёстких рамок</p></div></div>
       </div>
     </section>
 
@@ -974,7 +970,20 @@
       </div>
     </section>
 
-    <!-- 14. Course tracks -->
+    <!-- 14. Agenda before course topics -->
+    <section class="slide" data-title="О чём сегодня">
+      <div class="eyebrow reveal">Сегодня</div>
+      <h2 class="reveal" style="--d:60ms">О чём пойдёт речь</h2>
+      <p class="sub reveal" style="--d:120ms">Короткая карта вводного: от смысла эфира до того, как устроен курс дальше.</p>
+      <div class="big-list">
+        <div class="item reveal" style="--d:180ms"><div class="n">01</div><div><h3>Смысл и форматы</h3><p style="color:var(--muted)">Зачем нужны трансляции и какими они бывают</p></div></div>
+        <div class="item reveal" style="--d:240ms"><div class="n">02</div><div><h3>Пайплайн эфира</h3><p style="color:var(--muted)">Источник → сигнал → микшер → доставка → зритель</p></div></div>
+        <div class="item reveal" style="--d:300ms"><div class="n">03</div><div><h3>Железо, софт, люди</h3><p style="color:var(--muted)">Из чего собирается трансляция и кто за что отвечает</p></div></div>
+        <div class="item reveal" style="--d:360ms"><div class="n">04</div><div><h3>Дальше по курсу</h3><p style="color:var(--muted)">Инженерные и режиссёрские темы — без жёсткого деления</p></div></div>
+      </div>
+    </section>
+
+    <!-- 15. Course tracks -->
     <section class="slide" data-title="Курс">
       <div class="eyebrow reveal">Курс</div>
       <h2 class="reveal" style="--d:60ms">Чему учимся дальше</h2>
