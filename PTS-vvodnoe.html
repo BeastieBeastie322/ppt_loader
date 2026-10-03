@@ -356,10 +356,11 @@
       background: linear-gradient(180deg, rgba(47, 214, 196, 0.12), rgba(18, 32, 54, 0.7));
       border: 1px solid rgba(47, 214, 196, 0.25);
       border-radius: 16px;
-      padding: 1rem;
-      min-height: 150px;
+      padding: 1.15rem 1rem;
+      min-height: 120px;
       display: flex;
       flex-direction: column;
+      justify-content: center;
     }
     .pipe .thumb {
       height: 64px;
@@ -453,7 +454,7 @@
     }
     .venue .shot {
       flex: 1;
-      min-height: 130px;
+      min-height: 160px;
       border-bottom: 1px solid var(--line);
       background:
         linear-gradient(160deg, rgba(47, 214, 196, 0.16), transparent 55%),
@@ -462,16 +463,18 @@
       align-items: flex-end;
       padding: 0.85rem 1rem;
       position: relative;
+      overflow: hidden;
     }
-    .venue:nth-child(2) .shot {
-      background:
-        linear-gradient(160deg, rgba(255, 122, 69, 0.18), transparent 55%),
-        rgba(10, 16, 28, 0.9);
+    .venue .shot.has-photo {
+      padding: 0;
+      background: #0a101c;
     }
-    .venue:nth-child(3) .shot {
-      background:
-        linear-gradient(160deg, rgba(93, 255, 154, 0.12), transparent 55%),
-        rgba(10, 16, 28, 0.9);
+    .venue .shot img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .venue .shot span {
       font-family: "Unbounded", sans-serif;
@@ -479,6 +482,9 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--accent);
+    }
+    .pipe {
+      justify-content: center;
     }
     .venue .body { padding: 1.1rem 1.15rem 1.25rem; }
     .venue .tag { font-weight: 600; margin-top: 0.55rem; }
@@ -708,7 +714,7 @@
           <h3>Кто мы в кадре</h3>
           <ul>
             <li>Мы <strong style="color:var(--text)">не видеооператоры</strong></li>
-            <li>Но иногда <strong style="color:var(--text)">выходим видеооператорами</strong> на эфир</li>
+            <li>Иногда <strong style="color:var(--text)">выходим видеооператорами</strong> на эфир</li>
             <li>С камерами работаем <strong style="color:var(--text)">не хуже видеооператоров</strong> — понимаем кадр, свет, экспозицию</li>
             <li>Наша суперсила — связать камеру, сигнал, микшер и доставку</li>
           </ul>
@@ -794,34 +800,29 @@
       </div>
     </section>
 
-    <!-- 7. Pipeline with fragments + photo slots -->
+    <!-- 7. Pipeline with fragments -->
     <section class="slide" data-title="Пайплайн" data-fragments="1">
       <div class="eyebrow">Цепочка</div>
       <h2>Что нужно для трансляции</h2>
       <p class="sub">Базовый пайплайн от сцены до зрителя. Каждый шаг — по нажатию.</p>
       <div class="pipeline">
         <div class="pipe fragment" data-frag="0">
-          <div class="thumb" data-photo="pipe-cam">фото · камера</div>
           <h3>Источник</h3>
           <p style="color:var(--muted);font-size:0.92rem">Камеры, ПК, презентации, графика</p>
         </div>
         <div class="pipe fragment" data-frag="1">
-          <div class="thumb" data-photo="pipe-signal">фото · сигнал</div>
           <h3>Сигнал</h3>
           <p style="color:var(--muted);font-size:0.92rem">Кабели, конвертеры, матрицы</p>
         </div>
         <div class="pipe fragment" data-frag="2">
-          <div class="thumb" data-photo="pipe-mix">фото · микшер</div>
           <h3>Микшер</h3>
           <p style="color:var(--muted);font-size:0.92rem">vMix / пульты, переключения</p>
         </div>
         <div class="pipe fragment" data-frag="3">
-          <div class="thumb">доставка</div>
           <h3>Доставка</h3>
           <p style="color:var(--muted);font-size:0.92rem">RTMP / SRT / NDI, стрим</p>
         </div>
         <div class="pipe fragment" data-frag="4">
-          <div class="thumb">зритель</div>
           <h3>Зритель</h3>
           <p style="color:var(--muted);font-size:0.92rem">Платформа, экран, архив</p>
         </div>
@@ -900,51 +901,22 @@
       <div class="roles">
         <div class="role reveal" style="--d:120ms"><h3>Выпускающий режиссёр</h3><p>Отвечает за эфир целиком: готовность, тайминг, финальное «можно в эфир».</p></div>
         <div class="role reveal" style="--d:180ms"><h3>Режиссёр трансляции</h3><p>Решает, что в программе. Переключения, темп, крупности, реакция на сцену.</p></div>
-        <div class="role alt reveal" style="--d:240ms"><h3>Инженер ПТС</h3><p>Коммутация, сигналы, железо, стрим — чтобы всё работало.</p></div>
+        <div class="role reveal" style="--d:240ms"><h3>Инженер ПТС</h3><p>Коммутация, сигналы, железо, стрим — чтобы всё работало.</p></div>
         <div class="role reveal" style="--d:300ms"><h3>Оператор</h3><p>Строит кадр, держит фокус, слушает команды. Мы иногда закрываем этот пост сами.</p></div>
-        <div class="role alt reveal" style="--d:360ms"><h3>Виджей трансляции</h3><p>Графика в эфире: слои, переходы, визуальный ритм программы.</p></div>
+        <div class="role reveal" style="--d:360ms"><h3>Виджей трансляции</h3><p>Графика в эфире: слои, переходы, визуальный ритм программы.</p></div>
         <div class="role reveal" style="--d:420ms"><h3>Звук / продюсер</h3><p>Чистый звук в программу и связь с органами по сценарию события.</p></div>
       </div>
     </section>
 
-    <!-- 11. Zones -->
-    <section class="slide" data-title="Зоны">
-      <div class="eyebrow reveal">Ответственность</div>
-      <h2 class="reveal" style="--d:60ms">Зоны ответственности</h2>
-      <div class="two-col">
-        <ul class="list-plain">
-          <li class="reveal" style="--d:120ms"><span class="badge">Вып</span><div><strong>Эфир как продукт</strong><br><span style="color:var(--muted)">Готовность смены и финальные решения</span></div></li>
-          <li class="reveal" style="--d:180ms"><span class="badge">Реж</span><div><strong>Картинка в программе</strong><br><span style="color:var(--muted)">Что видит зритель прямо сейчас</span></div></li>
-          <li class="reveal" style="--d:240ms"><span class="badge">Инж</span><div><strong>Сигнальный путь</strong><br><span style="color:var(--muted)">От камеры до стрима без сюрпризов</span></div></li>
-          <li class="reveal" style="--d:300ms"><span class="badge warm">Орг</span><div><strong>Сценарий события</strong><br><span style="color:var(--muted)">Порядок номеров, гости, тайминг</span></div></li>
-        </ul>
-        <div class="tile reveal-scale" style="--d:220ms">
-          <h3>Правило эфира</h3>
-          <p>Один источник правды. Не чиним «втихую» чужую зону — говорим в канал связи. Сбой без коммуникации хуже самого сбоя.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 12. Subordination -->
-    <section class="slide" data-title="Субординация">
-      <div class="eyebrow reveal">Иерархия</div>
-      <h2 class="reveal" style="--d:60ms">Субординация на площадке</h2>
-      <div class="big-list">
-        <div class="item reveal" style="--d:120ms"><div class="n">1</div><div><h3>Продюсер / орг мероприятия</h3><p style="color:var(--muted)">Что происходит на сцене и когда</p></div></div>
-        <div class="item reveal" style="--d:180ms"><div class="n">2</div><div><h3>Выпускающий + режиссёр трансляции</h3><p style="color:var(--muted)">Что уходит в эфир и в каком виде</p></div></div>
-        <div class="item reveal" style="--d:240ms"><div class="n">3</div><div><h3>Инженер / lead ПТС</h3><p style="color:var(--muted)">Техническая готовность и аварийные решения</p></div></div>
-        <div class="item reveal" style="--d:300ms"><div class="n">4</div><div><h3>Операторы, виджей, ассистенты</h3><p style="color:var(--muted)">Держат свои посты и выполняют команды</p></div></div>
-      </div>
-      <p class="lead reveal" style="--d:380ms">В эфире нет демократии кадров. Есть роли и чёткие команды.</p>
-    </section>
-
-    <!-- 13. Venues -->
+    <!-- 11. Venues -->
     <section class="slide" data-title="Площадки">
       <div class="eyebrow reveal">Площадки</div>
       <h2 class="reveal" style="--d:60ms">Где мы работаем</h2>
       <div class="venues">
         <div class="venue reveal-scale" style="--d:140ms">
-          <div class="shot" data-photo="venue-akt"><span>фото · актовый</span></div>
+          <div class="shot has-photo" data-photo="venue-akt">
+            <img src="assets/venue-akt.jpg" alt="Актовый зал" />
+          </div>
           <div class="body">
             <h3>Актовый зал</h3>
             <p style="color:var(--muted);margin-top:0.4rem">Крупные мероприятия и полноценные эфиры.</p>
@@ -952,19 +924,23 @@
           </div>
         </div>
         <div class="venue reveal-scale" style="--d:220ms">
-          <div class="shot" data-photo="venue-ptska"><span>фото · ПТСКА</span></div>
+          <div class="shot has-photo" data-photo="venue-ptska">
+            <img src="assets/venue-pts.jpg" alt="ПТСКА" />
+          </div>
           <div class="body">
             <h3>ПТСКА</h3>
             <p style="color:var(--muted);margin-top:0.4rem">Наша рабочая зона: сборка, учебка, железо.</p>
-            <p class="tag" style="color:var(--accent-2)">Домашняя база</p>
+            <p class="tag" style="color:var(--accent)">Домашняя база</p>
           </div>
         </div>
         <div class="venue reveal-scale" style="--d:300ms">
-          <div class="shot" data-photo="venue-ext"><span>фото · выезд</span></div>
+          <div class="shot has-photo" data-photo="venue-ext">
+            <img src="assets/venue-ext.jpg" alt="Внешние площадки" />
+          </div>
           <div class="body">
             <h3>Внешние площадки</h3>
             <p style="color:var(--muted);margin-top:0.4rem">Выезды: типовые схемы, быстрый разворот, полевые условия.</p>
-            <p class="tag" style="color:var(--ok)">Внешние эфиры</p>
+            <p class="tag" style="color:var(--accent)">Внешние эфиры</p>
           </div>
         </div>
       </div>
@@ -1029,19 +1005,27 @@
       <p class="lead reveal" style="--d:380ms">Цель курса — не сдать теорию, а уметь поднять трансляцию.</p>
     </section>
 
-    <!-- 16. Finale -->
+    <!-- Finale -->
     <section class="slide" data-title="Итог">
-      <div class="two-col">
-        <div>
-          <div class="eyebrow reveal">Итог</div>
-          <p class="quote reveal" style="--d:100ms">ПТС делает событие видимым за пределами зала.</p>
-          <p class="lead reveal" style="--d:220ms">Дальше — глубже в режиссуру и железо. Вопросы — сейчас.</p>
-          <div class="cta reveal" style="--d:320ms">Готовы к эфиру →</div>
+      <div class="eyebrow reveal">Итог</div>
+      <h2 class="reveal" style="--d:60ms">Трансляции — вводное занятие</h2>
+      <p class="sub reveal" style="--d:120ms">ПТС делает событие видимым за пределами зала. Кратко, что разобрали:</p>
+      <div class="grid grid-2">
+        <div class="tile reveal-scale" style="--d:180ms">
+          <h3>Смысл и форматы</h3>
+          <p>Зачем нужен эфир, какие бывают трансляции — от live и гибрида до записи и мультикамеры.</p>
         </div>
         <div class="tile reveal-scale" style="--d:240ms">
-          <h3>ТЕХ ГУАП · ПТС</h3>
-          <p style="margin:0.8rem 0;color:var(--muted)">Руководитель направления:<br><strong style="color:var(--text)">Вадим Тоскин</strong></p>
-          <p style="color:var(--muted)">Вводное занятие<br>Трансляции: зачем и с чем едят</p>
+          <h3>Пайплайн</h3>
+          <p>Источник → сигнал → микшер → доставка → зритель. Базовая цепочка любого эфира.</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:300ms">
+          <h3>Железо, софт, люди</h3>
+          <p>Камеры и коммутация, vMix и контент, роли на смене — кто собирает картинку.</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:360ms">
+          <h3>Курс дальше</h3>
+          <p>Инженерные и режиссёрские темы без жёстких рамок — плюс практика и нулевая трансляция.</p>
         </div>
       </div>
     </section>
