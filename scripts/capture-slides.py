@@ -30,9 +30,10 @@ with sync_playwright() as p:
       }
       .orb { display: none !important; }
       .scanline { display: none !important; }
-      .reveal, .reveal-left, .reveal-scale {
+      .reveal, .reveal-left, .reveal-scale, .fragment, .fragment.visible {
         opacity: 1 !important;
         transform: none !important;
+        filter: none !important;
       }
       .pipe::after { opacity: 1 !important; }
     """)
@@ -44,8 +45,13 @@ with sync_playwright() as p:
         page.evaluate(
             """(idx) => {
               document.querySelectorAll('.slide').forEach((s, n) => {
-                s.classList.toggle('active', n === idx);
-                s.classList.remove('exit-left');
+                const on = n === idx;
+                s.classList.toggle('active', on);
+                // For static review: show all step-fragments fully revealed
+                s.querySelectorAll('.fragment').forEach((f) => {
+                  f.classList.toggle('visible', on);
+                  f.classList.remove('hl');
+                });
               });
               const counter = document.getElementById('counter');
               const progress = document.getElementById('progress');

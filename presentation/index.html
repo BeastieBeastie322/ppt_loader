@@ -17,6 +17,7 @@
       --accent-2: #ff7a45;
       --line: rgba(255, 255, 255, 0.1);
       --ok: #5dff9a;
+      --safe: clamp(2rem, 5vw, 4.5rem);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,12 +43,12 @@
       filter: blur(60px);
       pointer-events: none;
       z-index: 0;
-      opacity: 0.45;
+      opacity: 0.4;
       animation: drift 18s ease-in-out infinite alternate;
     }
     .orb.a { width: 420px; height: 420px; background: #2fd6c4; top: -120px; left: -80px; }
     .orb.b { width: 360px; height: 360px; background: #ff7a45; bottom: -140px; right: -60px; animation-duration: 22s; animation-delay: -4s; }
-    .orb.c { width: 280px; height: 280px; background: #4f7cff; top: 40%; left: 55%; opacity: 0.22; animation-duration: 26s; }
+    .orb.c { width: 280px; height: 280px; background: #4f7cff; top: 40%; left: 55%; opacity: 0.2; animation-duration: 26s; }
 
     @keyframes drift {
       from { transform: translate(0, 0) scale(1); }
@@ -59,7 +60,7 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.18;
+      opacity: 0.16;
       z-index: 0;
       background-image:
         linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
@@ -68,43 +69,24 @@
       mask-image: radial-gradient(ellipse at center, black 35%, transparent 80%);
     }
 
-    .scanline {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-      background: linear-gradient(transparent 50%, rgba(47, 214, 196, 0.03) 50%);
-      background-size: 100% 4px;
-      opacity: 0.35;
-      animation: scan 8s linear infinite;
-    }
-    @keyframes scan {
-      from { background-position: 0 0; }
-      to { background-position: 0 40px; }
-    }
-
-    .deck {
-      height: 100%;
-      width: 100%;
-      position: relative;
-      z-index: 2;
-    }
+    .deck { height: 100%; width: 100%; position: relative; z-index: 2; }
 
     .slide {
       position: absolute;
       inset: 0;
-      padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1.5rem, 5vw, 4.5rem) 3.5rem;
+      padding: var(--safe);
+      padding-bottom: calc(var(--safe) + 1.2rem);
       display: flex;
       flex-direction: column;
       justify-content: center;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transform: translateX(40px) scale(0.985);
+      transform: translateX(36px) scale(0.985);
       transition:
-        opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-        visibility 0.55s;
+        opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0.5s;
     }
 
     .slide.active {
@@ -114,17 +96,8 @@
       transform: translateX(0) scale(1);
     }
 
-    .slide.exit-left {
-      opacity: 0;
-      visibility: hidden;
-      transform: translateX(-36px) scale(0.985);
-    }
-
-    .brand {
-      font-family: "Unbounded", sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      line-height: 0.95;
+    .slide.hero {
+      justify-content: center;
     }
 
     .eyebrow {
@@ -138,7 +111,6 @@
       text-transform: uppercase;
       margin-bottom: 1rem;
     }
-
     .eyebrow::before {
       content: "";
       width: 0.55rem;
@@ -148,7 +120,6 @@
       box-shadow: 0 0 0 0 rgba(47, 214, 196, 0.7);
       animation: pulse 1.8s infinite;
     }
-
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(47, 214, 196, 0.55); }
       70% { box-shadow: 0 0 0 12px rgba(47, 214, 196, 0); }
@@ -157,25 +128,25 @@
 
     h1 {
       font-family: "Unbounded", sans-serif;
-      font-size: clamp(2.4rem, 7vw, 5.2rem);
+      font-size: clamp(2.8rem, 8vw, 6rem);
       font-weight: 700;
       line-height: 1.02;
-      max-width: 14ch;
+      max-width: 12ch;
     }
 
     h2 {
       font-family: "Unbounded", sans-serif;
-      font-size: clamp(1.8rem, 4.4vw, 3.2rem);
+      font-size: clamp(1.7rem, 4vw, 3rem);
       font-weight: 600;
       line-height: 1.1;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
     }
 
     h3 {
       font-family: "Unbounded", sans-serif;
-      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      font-size: clamp(1.05rem, 1.8vw, 1.3rem);
       font-weight: 600;
-      margin-bottom: 0.55rem;
+      margin-bottom: 0.45rem;
     }
 
     .lead {
@@ -190,65 +161,73 @@
       color: var(--muted);
       font-size: 1.05rem;
       line-height: 1.55;
-      max-width: 55ch;
-      margin-bottom: 1.5rem;
+      max-width: 58ch;
+      margin-bottom: 1.3rem;
+    }
+
+    .hero-title {
+      font-family: "Unbounded", sans-serif;
+      font-weight: 700;
+      font-size: clamp(3rem, 8.5vw, 6.4rem);
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+      max-width: 11ch;
+      background: linear-gradient(120deg, #fff 15%, #2fd6c4 55%, #ff9b6a 95%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shine 7s ease-in-out infinite;
+    }
+    @keyframes shine {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 100% center; }
     }
 
     .hero-meta {
-      margin-top: 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem 1.5rem;
+      margin-top: 2.2rem;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
       color: var(--muted);
-      font-size: 0.95rem;
     }
     .hero-meta strong { color: var(--text); font-weight: 600; }
 
-    /* Reveal animations for children */
     .reveal {
       opacity: 0;
-      transform: translateY(22px);
-      transition:
-        opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: translateY(18px);
+      transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
       transition-delay: var(--d, 0ms);
     }
-    .slide.active .reveal {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .reveal-left {
-      opacity: 0;
-      transform: translateX(-28px);
-      transition:
-        opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-      transition-delay: var(--d, 0ms);
-    }
-    .slide.active .reveal-left {
-      opacity: 1;
-      transform: translateX(0);
-    }
+    .slide.active .reveal { opacity: 1; transform: none; }
 
     .reveal-scale {
       opacity: 0;
-      transform: scale(0.92);
-      transition:
-        opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: scale(0.94);
+      transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
       transition-delay: var(--d, 0ms);
     }
-    .slide.active .reveal-scale {
+    .slide.active .reveal-scale { opacity: 1; transform: none; }
+
+    .fragment {
+      opacity: 0;
+      transform: translateY(18px) scale(0.98);
+      pointer-events: none;
+      transition:
+        opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.45s ease;
+      filter: blur(4px);
+    }
+    .fragment.visible {
       opacity: 1;
-      transform: scale(1);
+      transform: none;
+      pointer-events: auto;
+      filter: blur(0);
+    }
+    .fragment.hl {
+      box-shadow: 0 0 0 1px rgba(47, 214, 196, 0.45), 0 10px 40px rgba(47, 214, 196, 0.12);
     }
 
-    .grid {
-      display: grid;
-      gap: 1rem;
-      width: min(100%, 1100px);
-    }
+    .grid { display: grid; gap: 1rem; width: min(100%, 1180px); }
     .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -259,12 +238,6 @@
       border-radius: 18px;
       padding: 1.15rem 1.2rem;
       backdrop-filter: blur(10px);
-      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .tile:hover {
-      border-color: rgba(47, 214, 196, 0.35);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
     }
     .tile p, .tile li {
       color: var(--muted);
@@ -284,14 +257,85 @@
       color: var(--accent);
       font-size: 0.85rem;
       letter-spacing: 0.08em;
-      margin-bottom: 0.45rem;
+      margin-bottom: 0.4rem;
+    }
+
+    /* Slide 2 layout: text + guilds + photo slots */
+    .who-layout {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 1.4rem;
+      width: min(100%, 1200px);
+      align-items: stretch;
+    }
+    .guilds-mini {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+    .guild-chip {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.85rem 0.95rem;
+      background: rgba(15, 24, 40, 0.55);
+    }
+    .photo-stack {
+      display: grid;
+      grid-template-rows: 1.25fr 1fr;
+      gap: 0.85rem;
+      min-height: 420px;
+    }
+    .photo-slot {
+      position: relative;
+      border-radius: 20px;
+      border: 1.5px dashed rgba(47, 214, 196, 0.35);
+      background:
+        linear-gradient(145deg, rgba(47, 214, 196, 0.08), rgba(255, 122, 69, 0.06)),
+        rgba(10, 16, 28, 0.7);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1rem 1.1rem;
+      min-height: 160px;
+    }
+    .photo-slot::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(47,214,196,0.12), transparent 45%),
+        repeating-linear-gradient(-35deg, transparent, transparent 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 20px);
+      pointer-events: none;
+    }
+    .photo-slot .label {
+      position: relative;
+      font-family: "Unbounded", sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .photo-slot .hint {
+      position: relative;
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-top: 0.25rem;
+    }
+    .photo-slot img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .pipeline {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 0.75rem;
-      width: min(100%, 1100px);
+      width: min(100%, 1180px);
     }
     .pipe {
       position: relative;
@@ -299,34 +343,47 @@
       border: 1px solid rgba(47, 214, 196, 0.25);
       border-radius: 16px;
       padding: 1rem;
-      min-height: 120px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pipe .thumb {
+      height: 64px;
+      border-radius: 12px;
+      border: 1px dashed rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.25);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+    .pipe .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .pipe::after {
       content: "›";
       position: absolute;
-      right: -0.65rem;
+      right: -0.6rem;
       top: 50%;
       transform: translateY(-50%);
       color: var(--accent);
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       font-weight: 700;
-      opacity: 0;
-    }
-    .slide.active .pipe::after {
-      animation: arrowIn 0.4s ease forwards;
-      animation-delay: calc(var(--pipe-i, 0) * 80ms + 400ms);
     }
     .pipe:last-child::after { content: none; }
-    @keyframes arrowIn {
-      from { opacity: 0; transform: translateY(-50%) translateX(-6px); }
-      to { opacity: 1; transform: translateY(-50%) translateX(0); }
-    }
 
     .roles {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.9rem;
-      width: min(100%, 1100px);
+      gap: 0.85rem;
+      width: min(100%, 1180px);
     }
     .role {
       border-left: 3px solid var(--accent);
@@ -335,6 +392,7 @@
       padding: 1rem 1.1rem;
     }
     .role.alt { border-left-color: var(--accent-2); }
+    .role p { color: var(--muted); font-size: 0.95rem; line-height: 1.4; }
 
     .list-plain {
       display: grid;
@@ -352,7 +410,6 @@
       border: 1px solid var(--line);
       border-radius: 14px;
     }
-
     .badge {
       font-family: "Unbounded", sans-serif;
       font-size: 0.75rem;
@@ -368,50 +425,107 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1rem;
-      width: min(100%, 1100px);
+      width: min(100%, 1180px);
     }
     .venue {
-      min-height: 210px;
+      min-height: 260px;
       border-radius: 20px;
-      padding: 1.3rem;
+      padding: 0;
       border: 1px solid var(--line);
-      background:
-        linear-gradient(160deg, rgba(47, 214, 196, 0.16), transparent 55%),
-        rgba(14, 23, 38, 0.8);
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      background: rgba(14, 23, 38, 0.85);
     }
-    .venue:nth-child(2) {
+    .venue .shot {
+      flex: 1;
+      min-height: 130px;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(160deg, rgba(47, 214, 196, 0.16), transparent 55%),
+        rgba(10, 16, 28, 0.9);
+      display: flex;
+      align-items: flex-end;
+      padding: 0.85rem 1rem;
+      position: relative;
+    }
+    .venue:nth-child(2) .shot {
       background:
         linear-gradient(160deg, rgba(255, 122, 69, 0.18), transparent 55%),
-        rgba(14, 23, 38, 0.8);
+        rgba(10, 16, 28, 0.9);
     }
-    .venue:nth-child(3) {
+    .venue:nth-child(3) .shot {
       background:
         linear-gradient(160deg, rgba(93, 255, 154, 0.12), transparent 55%),
-        rgba(14, 23, 38, 0.8);
+        rgba(10, 16, 28, 0.9);
+    }
+    .venue .shot span {
+      font-family: "Unbounded", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .venue .body { padding: 1.1rem 1.15rem 1.25rem; }
+    .venue .tag { font-weight: 600; margin-top: 0.55rem; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 1.3rem;
+      width: min(100%, 1180px);
+      align-items: start;
     }
 
-    .roadmap {
+    .track-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.75rem 1.2rem;
-      width: min(100%, 1000px);
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      width: min(100%, 1100px);
     }
-    .roadmap li {
-      list-style: none;
-      display: flex;
-      gap: 0.75rem;
-      align-items: baseline;
-      padding: 0.55rem 0;
-      border-bottom: 1px solid var(--line);
+    .track {
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      padding: 1.25rem;
+      background: rgba(15, 24, 40, 0.6);
+    }
+    .track.eng { border-color: rgba(47, 214, 196, 0.3); }
+    .track.dir { border-color: rgba(255, 122, 69, 0.3); }
+    .track ul { list-style: none; display: grid; gap: 0.45rem; margin-top: 0.8rem; }
+    .track li { color: var(--muted); }
+    .track li::before {
+      content: "·";
+      color: var(--accent);
+      margin-right: 0.5rem;
+      font-weight: 700;
+    }
+    .track.dir li::before { color: var(--accent-2); }
+
+    .note {
+      margin-top: 1rem;
       color: var(--muted);
+      font-size: 0.98rem;
+      max-width: 62ch;
     }
-    .roadmap strong {
-      color: var(--text);
-      font-weight: 600;
-      min-width: 9.5rem;
+
+    .big-list { display: grid; gap: 0.75rem; width: min(100%, 920px); }
+    .big-list .item {
+      display: grid;
+      grid-template-columns: 3.2rem 1fr;
+      gap: 0.9rem;
+      align-items: start;
+    }
+    .big-list .n {
+      font-family: "Unbounded", sans-serif;
+      color: var(--accent);
+      font-size: 1.15rem;
+    }
+
+    .quote {
+      font-family: "Unbounded", sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      line-height: 1.25;
+      max-width: 18ch;
     }
 
     .cta {
@@ -425,19 +539,22 @@
       color: #062018;
       font-weight: 700;
       width: fit-content;
-      box-shadow: 0 0 0 0 rgba(47, 214, 196, 0.4);
-      animation: ctaGlow 2.4s ease-in-out infinite;
     }
-    @keyframes ctaGlow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(47, 214, 196, 0.35); }
-      50% { box-shadow: 0 0 28px 4px rgba(47, 214, 196, 0.25); }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.6rem 0 1rem; }
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
     }
+    .pill.on { color: var(--accent); border-color: rgba(47,214,196,0.35); }
 
     .footer-bar {
       position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      left: 0; right: 0; bottom: 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -448,29 +565,18 @@
       z-index: 5;
       pointer-events: none;
     }
-
     .progress-track {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 3px;
-      background: rgba(255,255,255,0.06);
-      z-index: 6;
+      position: fixed; left: 0; right: 0; bottom: 0;
+      height: 3px; background: rgba(255,255,255,0.06); z-index: 6;
     }
     .progress {
       height: 100%;
       background: linear-gradient(90deg, var(--accent), var(--accent-2));
       width: 0%;
-      transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-      box-shadow: 0 0 12px rgba(47, 214, 196, 0.5);
+      transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 0 12px rgba(47, 214, 196, 0.45);
     }
-
-    .hint {
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-    }
+    .hint { display: flex; gap: 0.75rem; align-items: center; }
     .key {
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -479,59 +585,44 @@
       background: rgba(255,255,255,0.04);
     }
 
-    .two-col {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 1.5rem;
-      width: min(100%, 1100px);
-      align-items: start;
-    }
-
-    .quote {
-      font-family: "Unbounded", sans-serif;
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      line-height: 1.25;
-      max-width: 18ch;
-    }
-
-    .big-list {
+    .why-list {
       display: grid;
       gap: 0.85rem;
-      width: min(100%, 900px);
+      width: min(100%, 980px);
     }
-    .big-list .item {
+    .why-item {
       display: grid;
-      grid-template-columns: 3.2rem 1fr;
-      gap: 0.9rem;
+      grid-template-columns: 3.5rem 1fr;
+      gap: 1rem;
       align-items: start;
-    }
-    .big-list .n {
-      font-family: "Unbounded", sans-serif;
-      color: var(--accent);
-      font-size: 1.2rem;
-    }
-
-    .title-glow {
-      background: linear-gradient(120deg, #fff 20%, #2fd6c4 55%, #ff9b6a 90%);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: shine 6s ease-in-out infinite;
-    }
-    @keyframes shine {
-      0%, 100% { background-position: 0% center; }
-      50% { background-position: 100% center; }
+      padding: 1.05rem 1.2rem;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(15, 24, 40, 0.6);
     }
 
-    @media (max-width: 900px) {
+    .cam-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin-top: 0.85rem;
+    }
+    .cam-box {
+      border-radius: 14px;
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 980px) {
       .grid-2, .grid-3, .grid-4,
-      .pipeline, .roles, .venues, .roadmap, .two-col {
+      .pipeline, .roles, .venues, .two-col, .who-layout, .track-grid, .cam-split {
         grid-template-columns: 1fr;
       }
-      .pipe::after { content: none !important; }
-      h1 { max-width: none; }
-      .slide { justify-content: flex-start; padding-top: 2rem; overflow-y: auto; }
+      .pipe::after { content: none; }
+      .photo-stack { min-height: 280px; }
+      .slide { justify-content: flex-start; overflow-y: auto; }
+      h1, .hero-title { max-width: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -546,296 +637,402 @@
   <div class="orb a"></div>
   <div class="orb b"></div>
   <div class="orb c"></div>
-  <div class="scanline"></div>
 
   <div class="deck" id="deck">
 
-    <section class="slide active">
-      <div class="eyebrow reveal" style="--d:60ms">ТЕХ ГУАП · направление ПТС</div>
-      <h1 class="brand title-glow reveal" style="--d:140ms">Программно‑технические системы трансляций</h1>
-      <p class="lead reveal" style="--d:260ms">Вводное занятие: кто мы, чем занимаемся и как устроена работа над эфиром.</p>
-      <div class="hero-meta reveal" style="--d:380ms">
-        <span><strong>Лектор:</strong> Попов</span>
-        <span><strong>Дата:</strong> 13.11.2025</span>
-        <span><strong>Формат:</strong> лекция + знакомство</span>
+    <!-- 1. Title -->
+    <section class="slide active hero" data-title="Титул">
+      <div class="eyebrow reveal">ТЕХ ГУАП · направление ПТС</div>
+      <h1 class="hero-title reveal" style="--d:100ms">Трансляции:<br>зачем и с чем едят</h1>
+      <div class="hero-meta reveal" style="--d:260ms">
+        <strong>Тоскин</strong> — руководитель направления ПТС
       </div>
     </section>
 
-    <section class="slide">
-      <div class="eyebrow reveal">Кто мы</div>
-      <h2 class="reveal" style="--d:80ms">ТЕХ ГУАП</h2>
-      <p class="sub reveal" style="--d:160ms">Студия технического обеспечения мероприятий ГУАП. Мы делаем так, чтобы зритель видел и слышал «магию» — а техника оставалась невидимой.</p>
-      <div class="grid grid-2">
-        <div class="tile reveal-scale" style="--d:240ms">
-          <h3>Наша роль</h3>
-          <p>Техническое сопровождение университетских, городских и всероссийских мероприятий: свет, звук, видео, трансляции.</p>
+    <!-- 2. Who we are + guilds + photos -->
+    <section class="slide" data-title="Кто мы">
+      <div class="who-layout">
+        <div>
+          <div class="eyebrow reveal">Кто мы</div>
+          <h2 class="reveal" style="--d:80ms">ТЕХ ГУАП</h2>
+          <p class="sub reveal" style="--d:140ms">Студия технического обеспечения мероприятий. Делаем так, чтобы зритель видел и слышал «магию» — а техника оставалась невидимой.</p>
+          <div class="guilds-mini">
+            <div class="guild-chip reveal-scale" style="--d:200ms"><div class="num">01</div><h3>Звук</h3><p style="color:var(--muted);font-size:0.92rem">Площадка, микшер, микрофоны</p></div>
+            <div class="guild-chip reveal-scale" style="--d:260ms"><div class="num">02</div><h3>Свет</h3><p style="color:var(--muted);font-size:0.92rem">Атмосфера и приборы</p></div>
+            <div class="guild-chip reveal-scale" style="--d:320ms"><div class="num">03</div><h3>Видео</h3><p style="color:var(--muted);font-size:0.92rem">Экраны, проекторы, контент</p></div>
+            <div class="guild-chip reveal-scale" style="--d:380ms"><div class="num">04</div><h3>ПТС</h3><p style="color:var(--muted);font-size:0.92rem">Камеры, эфир, стрим, запись</p></div>
+          </div>
         </div>
-        <div class="tile reveal-scale" style="--d:340ms">
-          <h3>Как учимся</h3>
-          <p>Передаём знания из рук в руки: теория → практика на железе → реальные эфиры и площадки.</p>
+        <div class="photo-stack reveal" style="--d:220ms">
+          <div class="photo-slot" data-photo="who-1">
+            <div class="label">Фото 1 · команда / эфир</div>
+            <div class="hint">Сюда вставим кадр с площадки</div>
+          </div>
+          <div class="photo-slot" data-photo="who-2">
+            <div class="label">Фото 2 · железо / пульт</div>
+            <div class="hint">Сюда — рабочее место ПТС</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="slide">
-      <div class="eyebrow reveal">Структура студии</div>
-      <h2 class="reveal" style="--d:80ms">Четыре гильдии</h2>
-      <div class="grid grid-4" style="margin-top:0.5rem">
-        <div class="tile reveal-scale" style="--d:160ms"><div class="num">01</div><h3>Звук</h3><p>Площадка, микшер, микрофоны, контроль звучания.</p></div>
-        <div class="tile reveal-scale" style="--d:240ms"><div class="num">02</div><h3>Свет</h3><p>Атмосфера, приборы, сценическая картина.</p></div>
-        <div class="tile reveal-scale" style="--d:320ms"><div class="num">03</div><h3>Видео</h3><p>Экраны, проекторы, контент для номеров.</p></div>
-        <div class="tile reveal-scale" style="--d:400ms"><div class="num">04</div><h3>ПТС</h3><p>Камеры, коммутация, микшер, стрим, запись.</p></div>
-      </div>
-    </section>
-
-    <section class="slide">
+    <!-- 3. What is PTS -->
+    <section class="slide" data-title="Что такое ПТС">
       <div class="eyebrow reveal">Направление</div>
-      <h2 class="reveal" style="--d:80ms">Что такое ПТС</h2>
-      <p class="sub reveal" style="--d:160ms">ПТС — программно‑технические системы трансляций. Мы отвечаем за то, чтобы событие уехало за пределы зала: в VK, YouTube, на экраны и в архив.</p>
-      <div class="grid grid-3">
-        <div class="tile reveal-scale" style="--d:240ms"><h3>Снимаем</h3><p>Камеры, операторы, композиция кадра.</p></div>
-        <div class="tile reveal-scale" style="--d:320ms"><h3>Собираем</h3><p>Сигналы, микшер, графика, звук в эфире.</p></div>
-        <div class="tile reveal-scale" style="--d:400ms"><h3>Отдаём</h3><p>Стрим, запись, мониторинг качества.</p></div>
-      </div>
-    </section>
-
-    <section class="slide">
-      <div class="eyebrow reveal">Сегодня</div>
-      <h2 class="reveal" style="--d:80ms">План занятия</h2>
-      <div class="big-list">
-        <div class="item reveal-left" style="--d:140ms"><div class="n">01</div><div><h3>Зачем нужны трансляции</h3><p style="color:var(--muted)">Задачи эфира и ценность для мероприятия</p></div></div>
-        <div class="item reveal-left" style="--d:220ms"><div class="n">02</div><div><h3>Какими бывают трансляции</h3><p style="color:var(--muted)">Форматы и сценарии</p></div></div>
-        <div class="item reveal-left" style="--d:300ms"><div class="n">03</div><div><h3>Что и кто нужны для эфира</h3><p style="color:var(--muted)">Железо, софт, роли, зоны ответственности</p></div></div>
-        <div class="item reveal-left" style="--d:380ms"><div class="n">04</div><div><h3>Наши площадки и орги</h3><p style="color:var(--muted)">Актовый, 33‑04, лыгунятник, взаимодействие</p></div></div>
-        <div class="item reveal-left" style="--d:460ms"><div class="n">05</div><div><h3>Включение и дорожная карта курса</h3><p style="color:var(--muted)">Как войти в команду и чему учимся дальше</p></div></div>
-      </div>
-    </section>
-
-    <section class="slide">
-      <div class="eyebrow reveal">Смысл</div>
-      <h2 class="reveal" style="--d:80ms">Зачем нужны трансляции</h2>
+      <h2 class="reveal" style="--d:60ms">Что такое ПТС</h2>
+      <p class="sub reveal" style="--d:120ms"><strong style="color:var(--text)">Передвижная телевизионная станция</strong> — вся цепочка, которая увозит событие за пределы зала.</p>
       <div class="grid grid-2">
         <div class="tile reveal-scale" style="--d:180ms">
-          <h3>Доступность</h3>
+          <h3>Куда уходит картинка</h3>
           <ul>
-            <li>Зрители вне зала видят событие live</li>
-            <li>Архив для тех, кто опоздал или хочет пересмотреть</li>
-            <li>Охват университета и города шире стен площадки</li>
-          </ul>
-        </div>
-        <div class="tile reveal-scale" style="--d:300ms">
-          <h3>Качество мероприятия</h3>
-          <ul>
-            <li>Документация события «как было»</li>
-            <li>Контроль картинки и звука в эфире</li>
-            <li>Профессиональный опыт для команды</li>
-          </ul>
-        </div>
-      </div>
-      <p class="lead reveal" style="--d:420ms;max-width:50ch">Хорошая трансляция — не «камера в угол». Это отдельный продукт рядом с живым мероприятием.</p>
-    </section>
-
-    <section class="slide">
-      <div class="eyebrow reveal">Форматы</div>
-      <h2 class="reveal" style="--d:80ms">Какими бывают трансляции</h2>
-      <div class="grid grid-3">
-        <div class="tile reveal-scale" style="--d:140ms"><div class="num">LIVE</div><h3>Онлайн‑эфир</h3><p>Концерты, конференции, церемонии — картинка уходит в сеть в реальном времени.</p></div>
-        <div class="tile reveal-scale" style="--d:200ms"><div class="num">HYBRID</div><h3>Гибрид</h3><p>Зал + удалённые спикеры/зрители. Нужны ВКС, задержки, аккуратная маршрутизация.</p></div>
-        <div class="tile reveal-scale" style="--d:260ms"><div class="num">RECORD</div><h3>Запись / IMAG</h3><p>Фиксация на диск, показ на экранах зала, постпродакшн без обязательного стрима.</p></div>
-        <div class="tile reveal-scale" style="--d:320ms"><div class="num">MULTI</div><h3>Мультикамерная</h3><p>Несколько точек съёмки, режиссёр переключает планы в эфире.</p></div>
-        <div class="tile reveal-scale" style="--d:380ms"><div class="num">STUDIO</div><h3>Студийная</h3><p>Подкасты, интервью, ток‑шоу — контролируемый свет, звук и фон.</p></div>
-        <div class="tile reveal-scale" style="--d:440ms"><div class="num">EVENT</div><h3>Площадочная</h3><p>Выезд на площадку: быстрый разворот, типовые схемы, работа с оргами.</p></div>
-      </div>
-    </section>
-
-    <section class="slide">
-      <div class="eyebrow reveal">Цепочка</div>
-      <h2 class="reveal" style="--d:80ms">Что нужно для трансляции</h2>
-      <p class="sub reveal" style="--d:140ms">Базовый пайплайн от сцены до зрителя.</p>
-      <div class="pipeline">
-        <div class="pipe reveal-scale" style="--d:200ms;--pipe-i:0"><h3>Источник</h3><p>Камеры, ПК, презентации, графика</p></div>
-        <div class="pipe reveal-scale" style="--d:280ms;--pipe-i:1"><h3>Сигнал</h3><p>Кабели, конвертеры, матрицы</p></div>
-        <div class="pipe reveal-scale" style="--d:360ms;--pipe-i:2"><h3>Микшер</h3><p>vMix / пульты, переключения</p></div>
-        <div class="pipe reveal-scale" style="--d:440ms;--pipe-i:3"><h3>Доставка</h3><p>RTMP / SRT / NDI, стрим</p></div>
-        <div class="pipe reveal-scale" style="--d:520ms;--pipe-i:4"><h3>Зритель</h3><p>Платформа, экран, архив</p></div>
-      </div>
-    </section>
-
-    <section class="slide">
-      <div class="eyebrow reveal">Инфраструктура</div>
-      <h2 class="reveal" style="--d:80ms">Из чего собирается эфир</h2>
-      <div class="grid grid-3">
-        <div class="tile reveal-scale" style="--d:160ms">
-          <h3>Железо</h3>
-          <ul>
-            <li>Камеры и штативы</li>
-            <li>Карты ввода/вывода</li>
-            <li>Сплиттеры, матрицы, конвертеры</li>
-            <li>Звуковые карты, стриммеры, рекордеры</li>
+            <li><strong style="color:var(--text)">Прямой эфир</strong> — VK, YouTube и другие платформы</li>
+            <li><strong style="color:var(--text)">Онлайн‑встреча</strong> — Zoom, TrueConf и похожие сервисы</li>
+            <li><strong style="color:var(--text)">Запись</strong> — архив, нарезки, отчётность</li>
+            <li><strong style="color:var(--text)">Удалённый зал</strong> — трансляция в другое помещение</li>
           </ul>
         </div>
         <div class="tile reveal-scale" style="--d:260ms">
-          <h3>Софт</h3>
+          <h3>Кто мы в кадре</h3>
           <ul>
-            <li>vMix — наш основной микшер</li>
-            <li>Графика, титры, стингеры</li>
-            <li>Кодеки и контейнеры записи</li>
-            <li>Протоколы доставки (RTMP, SRT…)</li>
+            <li>Мы <strong style="color:var(--text)">не операторская служба</strong> по роли</li>
+            <li>Но иногда <strong style="color:var(--text)">выходим операторами</strong> на эфир</li>
+            <li>С камерами работаем <strong style="color:var(--text)">не хуже операторов</strong> — понимаем кадр, свет, экспозицию</li>
+            <li>Наша суперсила — связать камеру, сигнал, микшер и доставку</li>
           </ul>
         </div>
-        <div class="tile reveal-scale" style="--d:360ms">
-          <h3>Люди</h3>
+        <div class="tile reveal-scale" style="--d:340ms">
+          <h3>Что делаем руками</h3>
           <ul>
-            <li>Режиссёр эфира</li>
-            <li>Операторы</li>
-            <li>Инженер / коммутация</li>
-            <li>Звук, контент, продюсер</li>
+            <li>Собираем схему эфира и коммутацию</li>
+            <li>Поднимаем микшер, графику, звук в программу</li>
+            <li>Следим за качеством сигнала до зрителя</li>
+          </ul>
+        </div>
+        <div class="tile reveal-scale" style="--d:420ms">
+          <h3>Зачем это студии</h3>
+          <ul>
+            <li>Мероприятие живёт дольше, чем зал</li>
+            <li>Есть контроль и ответственность за эфир</li>
+            <li>Реальный опыт продакшна, а не только теория</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <section class="slide">
+    <!-- 4. Course overview / plan -->
+    <section class="slide" data-title="О курсе">
+      <div class="eyebrow reveal">Сегодня</div>
+      <h2 class="reveal" style="--d:60ms">Это рассказ о курсе</h2>
+      <p class="sub reveal" style="--d:120ms">Вводное занятие — карта: зачем трансляции, из чего они собираются, кто за что отвечает и где мы работаем.</p>
+      <div class="grid grid-3" style="margin-bottom:1rem">
+        <div class="tile reveal-scale" style="--d:180ms"><div class="num">ПЛОЩАДКА</div><h3>Актовый</h3><p>Крупные эфиры и события университета</p></div>
+        <div class="tile reveal-scale" style="--d:260ms"><div class="num">БАЗА</div><h3>ПТСКА</h3><p>Наша рабочая зона: железо, учебка, сборки</p></div>
+        <div class="tile reveal-scale" style="--d:340ms"><div class="num">ПЛОЩАДКА</div><h3>Точка кипения</h3><p>Ещё одна точка мероприятий и эфиров</p></div>
+      </div>
+      <div class="big-list">
+        <div class="item reveal" style="--d:400ms"><div class="n">01</div><div><h3>Смысл и форматы</h3><p style="color:var(--muted)">Зачем эфир и какими бывают трансляции</p></div></div>
+        <div class="item reveal" style="--d:460ms"><div class="n">02</div><div><h3>Пайплайн и роли</h3><p style="color:var(--muted)">От камеры до зрителя, железо / софт / люди</p></div></div>
+        <div class="item reveal" style="--d:520ms"><div class="n">03</div><div><h3>Дальше по курсу</h3><p style="color:var(--muted)">Инженерная и режиссёрская ветки — без жёстких рамок</p></div></div>
+      </div>
+    </section>
+
+    <!-- 5. Why broadcasts — fragments -->
+    <section class="slide" data-title="Зачем трансляции" data-fragments="1">
+      <div class="eyebrow">Смысл</div>
+      <h2>Зачем нужны трансляции</h2>
+      <div class="why-list">
+        <div class="why-item fragment" data-frag="0">
+          <div class="n" style="font-family:Unbounded,sans-serif;color:var(--accent)">01</div>
+          <div>
+            <h3>Доступность</h3>
+            <p style="color:var(--muted)">Событие видят те, кто не попал в зал. Live сейчас — и архив потом.</p>
+          </div>
+        </div>
+        <div class="why-item fragment" data-frag="1">
+          <div class="n" style="font-family:Unbounded,sans-serif;color:var(--accent)">02</div>
+          <div>
+            <h3>Расширение аудитории</h3>
+            <p style="color:var(--muted)">Эфир выносит мероприятие за стены площадки: университет, город, партнёры, выпускники.</p>
+          </div>
+        </div>
+        <div class="why-item fragment" data-frag="2">
+          <div class="n" style="font-family:Unbounded,sans-serif;color:var(--accent)">03</div>
+          <div>
+            <h3>Удалённые команды и конференции</h3>
+            <p style="color:var(--muted)">Когда спикеры и слушатели в разных городах, трансляция — единственный общий «зал»: переговоры, форумы, гибридные сессии.</p>
+          </div>
+        </div>
+        <div class="why-item fragment" data-frag="3">
+          <div class="n" style="font-family:Unbounded,sans-serif;color:var(--accent)">04</div>
+          <div>
+            <h3>Качество самого события</h3>
+            <p style="color:var(--muted)">Контроль картинки и звука, фиксация «как было», отдельный продукт рядом с живым залом.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Types -->
+    <section class="slide" data-title="Форматы">
+      <div class="eyebrow reveal">Форматы</div>
+      <h2 class="reveal" style="--d:60ms">Какими бывают трансляции</h2>
+      <div class="grid grid-3">
+        <div class="tile reveal-scale" style="--d:120ms"><div class="num">LIVE</div><h3>Онлайн‑эфир</h3><p>Концерты, конференции, церемонии — картинка уходит в сеть в реальном времени.</p></div>
+        <div class="tile reveal-scale" style="--d:180ms"><div class="num">HYBRID</div><h3>Гибрид</h3><p>Зал + удалённые спикеры и зрители. ВКС, задержки, аккуратная маршрутизация.</p></div>
+        <div class="tile reveal-scale" style="--d:240ms"><div class="num">RECORD</div><h3>Запись / IMAG</h3><p>Фиксация на диск, показ на экранах зала, материалы без обязательного стрима.</p></div>
+        <div class="tile reveal-scale" style="--d:300ms"><div class="num">STUDIO</div><h3>Студийная</h3><p>Подкасты, интервью, ток‑шоу — контролируемый свет, звук и фон.</p></div>
+        <div class="tile reveal-scale" style="--d:360ms;grid-column: span 2;">
+          <div class="num">КАМЕРЫ</div>
+          <h3>Однокамерная и многокамерная</h3>
+          <div class="cam-split">
+            <div class="cam-box">
+              <h3 style="font-size:1rem">1 камера</h3>
+              <p style="color:var(--muted);font-size:0.95rem">Простой эфир, лекция, фиксация. Минимум постов, максимум дисциплины кадра.</p>
+            </div>
+            <div class="cam-box">
+              <h3 style="font-size:1rem">Много камер</h3>
+              <p style="color:var(--muted);font-size:0.95rem">Режиссёр переключает планы в эфире: общий, средний, детали, реакция зала.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Pipeline with fragments + photo slots -->
+    <section class="slide" data-title="Пайплайн" data-fragments="1">
+      <div class="eyebrow">Цепочка</div>
+      <h2>Что нужно для трансляции</h2>
+      <p class="sub">Базовый пайплайн от сцены до зрителя. Каждый шаг — по нажатию.</p>
+      <div class="pipeline">
+        <div class="pipe fragment" data-frag="0">
+          <div class="thumb" data-photo="pipe-cam">фото · камера</div>
+          <h3>Источник</h3>
+          <p style="color:var(--muted);font-size:0.92rem">Камеры, ПК, презентации, графика</p>
+        </div>
+        <div class="pipe fragment" data-frag="1">
+          <div class="thumb" data-photo="pipe-signal">фото · сигнал</div>
+          <h3>Сигнал</h3>
+          <p style="color:var(--muted);font-size:0.92rem">Кабели, конвертеры, матрицы</p>
+        </div>
+        <div class="pipe fragment" data-frag="2">
+          <div class="thumb" data-photo="pipe-mix">фото · микшер</div>
+          <h3>Микшер</h3>
+          <p style="color:var(--muted);font-size:0.92rem">vMix / пульты, переключения</p>
+        </div>
+        <div class="pipe fragment" data-frag="3">
+          <div class="thumb">доставка</div>
+          <h3>Доставка</h3>
+          <p style="color:var(--muted);font-size:0.92rem">RTMP / SRT / NDI, стрим</p>
+        </div>
+        <div class="pipe fragment" data-frag="4">
+          <div class="thumb">зритель</div>
+          <h3>Зритель</h3>
+          <p style="color:var(--muted);font-size:0.92rem">Платформа, экран, архив</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Hardware -->
+    <section class="slide" data-title="Железо">
+      <div class="eyebrow reveal">Инфраструктура</div>
+      <h2 class="reveal" style="--d:60ms">Железо</h2>
+      <p class="sub reveal" style="--d:120ms">То, без чего эфир не встанет на ноги.</p>
+      <div class="grid grid-3">
+        <div class="tile reveal-scale" style="--d:180ms">
+          <div class="num">01</div>
+          <h3>Камеры</h3>
+          <p>Точки съёмки, штативы, сигнал в тракт. Кадр начинается здесь.</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:260ms">
+          <div class="num">02</div>
+          <h3>Коммутация</h3>
+          <p>Кабели, сплиттеры, матрицы, конвертеры — путь сигнала без сюрпризов.</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:340ms">
+          <div class="num">03</div>
+          <h3>Микшер</h3>
+          <p>Железный или программный пульт: куда что входит и что уходит в эфир.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Software -->
+    <section class="slide" data-title="Софт">
+      <div class="eyebrow reveal">Инфраструктура</div>
+      <h2 class="reveal" style="--d:60ms">Софт</h2>
+      <p class="sub reveal" style="--d:120ms">Программы и материалы, которые собирают картинку в продукт.</p>
+      <div class="grid grid-2">
+        <div class="tile reveal-scale" style="--d:180ms">
+          <h3>Микшер и эфир</h3>
+          <ul>
+            <li>vMix — наш основной программный микшер</li>
+            <li>Входы / выходы, стрим, запись</li>
+            <li>Слои, маршруты, триггеры</li>
+          </ul>
+        </div>
+        <div class="tile reveal-scale" style="--d:260ms">
+          <h3>Контент в эфире</h3>
+          <ul>
+            <li>Титры, бамперы, стингеры</li>
+            <li>Презентации и заставки</li>
+            <li>Подготовка до эфира и «пожарные» варианты</li>
+          </ul>
+        </div>
+        <div class="tile reveal-scale" style="--d:340ms">
+          <h3>Кодеки и доставка</h3>
+          <ul>
+            <li>Запись: mp4, ProRes и компания</li>
+            <li>Доставка зрителю: RTMP, SRT…</li>
+            <li>ВКС: WebRTC и схемы MCU / SFU</li>
+          </ul>
+        </div>
+        <div class="tile reveal-scale" style="--d:420ms">
+          <h3>Сети и стандарты</h3>
+          <ul>
+            <li>NDI, Dante, SMPTE и «по кабелю»</li>
+            <li>Понимание, чем сигнал едет</li>
+            <li>Где узкое место — и как его обойти</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. People -->
+    <section class="slide" data-title="Люди">
       <div class="eyebrow reveal">Команда</div>
-      <h2 class="reveal" style="--d:80ms">Кто нужен на трансляции</h2>
+      <h2 class="reveal" style="--d:60ms">Люди на трансляции</h2>
       <div class="roles">
-        <div class="role reveal-left" style="--d:140ms"><h3>Режиссёр</h3><p style="color:var(--muted)">Решает, что в эфире. Переключения, темп, крупности, реакция на сцену.</p></div>
-        <div class="role reveal-left" style="--d:200ms"><h3>Оператор</h3><p style="color:var(--muted)">Строит кадр, держит фокус, слушает команды режиссёра.</p></div>
-        <div class="role alt reveal-left" style="--d:260ms"><h3>Инженер ПТС</h3><p style="color:var(--muted)">Коммутация, сигналы, железо, стрим, «чтобы всё работало».</p></div>
-        <div class="role reveal-left" style="--d:320ms"><h3>Звукорежиссёр</h3><p style="color:var(--muted)">Чистый звук в эфир: микрофоны, уровни, связь с залом.</p></div>
-        <div class="role alt reveal-left" style="--d:380ms"><h3>Контент / дизайн</h3><p style="color:var(--muted)">Титры, бамперы, презентации, запасные материалы.</p></div>
-        <div class="role reveal-left" style="--d:440ms"><h3>Продюсер / орг</h3><p style="color:var(--muted)">ТЗ, тайминг, согласования, связь с заказчиком.</p></div>
+        <div class="role reveal" style="--d:120ms"><h3>Выпускающий режиссёр</h3><p>Отвечает за эфир целиком: готовность, тайминг, финальное «можно в эфир».</p></div>
+        <div class="role reveal" style="--d:180ms"><h3>Режиссёр трансляции</h3><p>Решает, что в программе. Переключения, темп, крупности, реакция на сцену.</p></div>
+        <div class="role alt reveal" style="--d:240ms"><h3>Инженер ПТС</h3><p>Коммутация, сигналы, железо, стрим — чтобы всё работало.</p></div>
+        <div class="role reveal" style="--d:300ms"><h3>Оператор</h3><p>Строит кадр, держит фокус, слушает команды. Мы иногда закрываем этот пост сами.</p></div>
+        <div class="role alt reveal" style="--d:360ms"><h3>Виджей трансляции</h3><p>Графика в эфире: слои, переходы, визуальный ритм программы.</p></div>
+        <div class="role reveal" style="--d:420ms"><h3>Звук / продюсер</h3><p>Чистый звук в программу и связь с органами по сценарию события.</p></div>
       </div>
     </section>
 
-    <section class="slide">
+    <!-- 11. Zones -->
+    <section class="slide" data-title="Зоны">
       <div class="eyebrow reveal">Ответственность</div>
-      <h2 class="reveal" style="--d:80ms">Зоны ответственности</h2>
+      <h2 class="reveal" style="--d:60ms">Зоны ответственности</h2>
       <div class="two-col">
         <ul class="list-plain">
-          <li class="reveal-left" style="--d:160ms"><span class="badge">Реж</span><div><strong>Картинка в эфире</strong><br><span style="color:var(--muted)">Что видит зритель прямо сейчас</span></div></li>
-          <li class="reveal-left" style="--d:240ms"><span class="badge">Инж</span><div><strong>Сигнальный путь</strong><br><span style="color:var(--muted)">От камеры до стрима без сюрпризов</span></div></li>
-          <li class="reveal-left" style="--d:320ms"><span class="badge">Оп</span><div><strong>Качество кадра</strong><br><span style="color:var(--muted)">Композиция, фокус, стабильность</span></div></li>
-          <li class="reveal-left" style="--d:400ms"><span class="badge warm">Орг</span><div><strong>Сценарий события</strong><br><span style="color:var(--muted)">Порядок номеров, гости, тайминг</span></div></li>
+          <li class="reveal" style="--d:120ms"><span class="badge">Вып</span><div><strong>Эфир как продукт</strong><br><span style="color:var(--muted)">Готовность смены и финальные решения</span></div></li>
+          <li class="reveal" style="--d:180ms"><span class="badge">Реж</span><div><strong>Картинка в программе</strong><br><span style="color:var(--muted)">Что видит зритель прямо сейчас</span></div></li>
+          <li class="reveal" style="--d:240ms"><span class="badge">Инж</span><div><strong>Сигнальный путь</strong><br><span style="color:var(--muted)">От камеры до стрима без сюрпризов</span></div></li>
+          <li class="reveal" style="--d:300ms"><span class="badge warm">Орг</span><div><strong>Сценарий события</strong><br><span style="color:var(--muted)">Порядок номеров, гости, тайминг</span></div></li>
         </ul>
-        <div class="tile reveal-scale" style="--d:280ms">
+        <div class="tile reveal-scale" style="--d:220ms">
           <h3>Правило эфира</h3>
           <p>Один источник правды. Не чиним «втихую» чужую зону — говорим в канал связи. Сбой без коммуникации хуже самого сбоя.</p>
         </div>
       </div>
     </section>
 
-    <section class="slide">
+    <!-- 12. Subordination -->
+    <section class="slide" data-title="Субординация">
       <div class="eyebrow reveal">Иерархия</div>
-      <h2 class="reveal" style="--d:80ms">Субординация на площадке</h2>
+      <h2 class="reveal" style="--d:60ms">Субординация на площадке</h2>
       <div class="big-list">
-        <div class="item reveal-left" style="--d:140ms"><div class="n">1</div><div><h3>Продюсер / орг мероприятия</h3><p style="color:var(--muted)">Что происходит на сцене и когда</p></div></div>
-        <div class="item reveal-left" style="--d:220ms"><div class="n">2</div><div><h3>Режиссёр трансляции</h3><p style="color:var(--muted)">Что уходит в эфир и в каком виде</p></div></div>
-        <div class="item reveal-left" style="--d:300ms"><div class="n">3</div><div><h3>Инженер / lead ПТС</h3><p style="color:var(--muted)">Техническая готовность и аварийные решения</p></div></div>
-        <div class="item reveal-left" style="--d:380ms"><div class="n">4</div><div><h3>Операторы и ассистенты</h3><p style="color:var(--muted)">Выполняют команды, держат свои посты</p></div></div>
+        <div class="item reveal" style="--d:120ms"><div class="n">1</div><div><h3>Продюсер / орг мероприятия</h3><p style="color:var(--muted)">Что происходит на сцене и когда</p></div></div>
+        <div class="item reveal" style="--d:180ms"><div class="n">2</div><div><h3>Выпускающий + режиссёр трансляции</h3><p style="color:var(--muted)">Что уходит в эфир и в каком виде</p></div></div>
+        <div class="item reveal" style="--d:240ms"><div class="n">3</div><div><h3>Инженер / lead ПТС</h3><p style="color:var(--muted)">Техническая готовность и аварийные решения</p></div></div>
+        <div class="item reveal" style="--d:300ms"><div class="n">4</div><div><h3>Операторы, виджей, ассистенты</h3><p style="color:var(--muted)">Держат свои посты и выполняют команды</p></div></div>
       </div>
-      <p class="lead reveal" style="--d:480ms">В эфире нет демократии кадров. Есть роли и чёткие команды.</p>
+      <p class="lead reveal" style="--d:380ms">В эфире нет демократии кадров. Есть роли и чёткие команды.</p>
     </section>
 
-    <section class="slide">
+    <!-- 13. Venues -->
+    <section class="slide" data-title="Площадки">
       <div class="eyebrow reveal">Площадки</div>
-      <h2 class="reveal" style="--d:80ms">Где мы работаем</h2>
+      <h2 class="reveal" style="--d:60ms">Где мы работаем</h2>
       <div class="venues">
-        <div class="venue reveal-scale" style="--d:180ms">
-          <div>
-            <div class="num">ПЛОЩАДКА</div>
+        <div class="venue reveal-scale" style="--d:140ms">
+          <div class="shot" data-photo="venue-akt"><span>фото · актовый</span></div>
+          <div class="body">
             <h3>Актовый зал</h3>
-            <p style="color:var(--muted);margin-top:0.5rem">Крупные мероприятия, классическая мультикамерная схема, связь со сценой и органами.</p>
+            <p style="color:var(--muted);margin-top:0.4rem">Крупные мероприятия и полноценные эфиры.</p>
+            <p class="tag" style="color:var(--accent)">Большая площадка</p>
           </div>
-          <p style="color:var(--accent);font-weight:600">Большой эфир</p>
         </div>
-        <div class="venue reveal-scale" style="--d:280ms">
-          <div>
-            <div class="num">ПЛОЩАДКА</div>
-            <h3>33‑04</h3>
-            <p style="color:var(--muted);margin-top:0.5rem">Учебная / рабочая точка: оборудование, коммутация, практика «потрогать руками».</p>
+        <div class="venue reveal-scale" style="--d:220ms">
+          <div class="shot" data-photo="venue-ptska"><span>фото · ПТСКА</span></div>
+          <div class="body">
+            <h3>ПТСКА</h3>
+            <p style="color:var(--muted);margin-top:0.4rem">Наша рабочая зона: сборка, учебка, железо.</p>
+            <p class="tag" style="color:var(--accent-2)">Домашняя база</p>
           </div>
-          <p style="color:var(--accent-2);font-weight:600">База и практика</p>
         </div>
-        <div class="venue reveal-scale" style="--d:380ms">
-          <div>
-            <div class="num">ПЛОЩАДКА</div>
-            <h3>Лыгунятник</h3>
-            <p style="color:var(--muted);margin-top:0.5rem">Выездные и площадочные форматы — типовые схемы, быстрый разворот, полевые условия.</p>
+        <div class="venue reveal-scale" style="--d:300ms">
+          <div class="shot" data-photo="venue-ext"><span>фото · выезд</span></div>
+          <div class="body">
+            <h3>Внешние площадки</h3>
+            <p style="color:var(--muted);margin-top:0.4rem">Выезды: типовые схемы, быстрый разворот, полевые условия.</p>
+            <p class="tag" style="color:var(--ok)">Внешние эфиры</p>
           </div>
-          <p style="color:var(--ok);font-weight:600">Выезд</p>
         </div>
       </div>
     </section>
 
-    <section class="slide">
-      <div class="eyebrow reveal">Коммуникация</div>
-      <h2 class="reveal" style="--d:80ms">Орги и включение</h2>
-      <div class="grid grid-2">
-        <div class="tile reveal-scale" style="--d:180ms">
-          <h3>Работа с оргами</h3>
-          <ul>
-            <li>Берём ТЗ: формат, тайминг, гости, экраны</li>
-            <li>Согласуем точки съёмки и ограничения</li>
-            <li>Держим связь до / во время / после</li>
-            <li>Фиксируем «что нельзя» заранее</li>
-          </ul>
-        </div>
-        <div class="tile reveal-scale" style="--d:300ms">
-          <h3>Включение в команду</h3>
-          <ul>
-            <li>Приходишь на занятия и практики</li>
-            <li>Сначала ассистент / второй пост</li>
-            <li>Потом самостоятельные зоны</li>
-            <li>Цель — уверенно закрывать эфир</li>
-          </ul>
-        </div>
-      </div>
-      <p class="lead reveal" style="--d:420ms">Новичок не «мешает» — новичок усиливает смену, если знает свою зону.</p>
-    </section>
-
-    <section class="slide">
+    <!-- 14. Course tracks -->
+    <section class="slide" data-title="Курс">
       <div class="eyebrow reveal">Курс</div>
-      <h2 class="reveal" style="--d:80ms">Чему учимся дальше</h2>
-      <ul class="roadmap">
-        <li class="reveal" style="--d:120ms"><strong>Режиссура</strong> монтаж в эфире, кадр, крупности</li>
-        <li class="reveal" style="--d:160ms"><strong>Сигналы</strong> виды, кодирование, коммутация</li>
-        <li class="reveal" style="--d:200ms"><strong>Оборудование</strong> камеры, карты, матрицы, стриммеры</li>
-        <li class="reveal" style="--d:240ms"><strong>Стандарты</strong> SDI / HDMI и «по кабелю»</li>
-        <li class="reveal" style="--d:280ms"><strong>Кодеки</strong> запись, доставка, ВКС</li>
-        <li class="reveal" style="--d:320ms"><strong>vMix</strong> интерфейс, слои, маршруты, стрим</li>
-        <li class="reveal" style="--d:360ms"><strong>Камера</strong> экспозиция, FPS, фокус, штатив</li>
-        <li class="reveal" style="--d:400ms"><strong>Сети</strong> NDI, Dante, SRT, RTMP</li>
-        <li class="reveal" style="--d:440ms"><strong>Дизайн</strong> титры, стингеры, контент в эфире</li>
-        <li class="reveal" style="--d:480ms"><strong>Свет и цвет</strong> температура, раскладка, психология</li>
-        <li class="reveal" style="--d:520ms"><strong>Звук</strong> эфирный звук в трансляции</li>
-        <li class="reveal" style="--d:560ms"><strong>Менеджмент</strong> ТЗ, сценплан, заказчики</li>
-      </ul>
-    </section>
-
-    <section class="slide">
-      <div class="eyebrow reveal">Практика</div>
-      <h2 class="reveal" style="--d:80ms">Как будет проходить обучение</h2>
-      <div class="grid grid-3">
-        <div class="tile reveal-scale" style="--d:160ms"><div class="num">Л</div><h3>Лекции</h3><p>Теория: режиссура, сигналы, кодеки, сети, дизайн.</p></div>
-        <div class="tile reveal-scale" style="--d:260ms"><div class="num">П</div><h3>Практики</h3><p>Коммутация руками, vMix, камера, типовые схемы.</p></div>
-        <div class="tile reveal-scale" style="--d:360ms"><div class="num">ЭФИР</div><h3>Нулевая трансляция</h3><p>Собственно эфир «с нуля» — проверка, что всё сложилось.</p></div>
+      <h2 class="reveal" style="--d:60ms">Чему учимся дальше</h2>
+      <p class="sub reveal" style="--d:110ms">Деление условное: темы пересекаются, жёстких «ты только инженер / только режиссёр» нет.</p>
+      <div class="track-grid">
+        <div class="track eng reveal-scale" style="--d:180ms">
+          <div class="num">ИНЖЕНЕРНЫЕ</div>
+          <h3>Сигнал, железо, сети</h3>
+          <ul>
+            <li>Сигналы и коммутация</li>
+            <li>Оборудование и стандарты по кабелю</li>
+            <li>Кодеки, контейнеры, доставка</li>
+            <li>vMix: входы, маршруты, стрим</li>
+            <li>Сети: NDI, Dante, SRT, RTMP</li>
+            <li>Типовые схемы и «нулевая» трансляция</li>
+          </ul>
+        </div>
+        <div class="track dir reveal-scale" style="--d:260ms">
+          <div class="num">РЕЖИССЁРСКИЕ</div>
+          <h3>Кадр, монтаж, эфир</h3>
+          <ul>
+            <li>Монтаж в трансляции vs пост</li>
+            <li>Построение кадра и крупности</li>
+            <li>Операторские приёмы</li>
+            <li>Свет, цвет, ритм программы</li>
+            <li>Камера: экспозиция, фокус, штатив</li>
+            <li>Дизайн в эфире и работа с контентом</li>
+          </ul>
+        </div>
       </div>
-      <p class="lead reveal" style="--d:460ms">Цель курса — не сдать теорию, а уметь поднять трансляцию.</p>
+      <p class="note reveal" style="--d:360ms">Плюс менеджмент эфира: ТЗ, сценплан, зоны ответственности, заказчики — это общий слой для обеих веток.</p>
     </section>
 
-    <section class="slide">
+    <!-- 15. How we learn -->
+    <section class="slide" data-title="Формат обучения">
+      <div class="eyebrow reveal">Практика</div>
+      <h2 class="reveal" style="--d:60ms">Как проходит обучение</h2>
+      <div class="grid grid-3">
+        <div class="tile reveal-scale" style="--d:140ms"><div class="num">Л</div><h3>Лекции</h3><p>Теория: режиссура, сигналы, кодеки, сети, дизайн.</p></div>
+        <div class="tile reveal-scale" style="--d:220ms"><div class="num">П</div><h3>Практики</h3><p>Коммутация руками, vMix, камера, типовые схемы.</p></div>
+        <div class="tile reveal-scale" style="--d:300ms"><div class="num">ЭФИР</div><h3>Нулевая трансляция</h3><p>Эфир «с нуля» — проверка, что всё сложилось.</p></div>
+      </div>
+      <p class="lead reveal" style="--d:380ms">Цель курса — не сдать теорию, а уметь поднять трансляцию.</p>
+    </section>
+
+    <!-- 16. Finale -->
+    <section class="slide" data-title="Итог">
       <div class="two-col">
         <div>
           <div class="eyebrow reveal">Итог</div>
-          <p class="quote reveal" style="--d:120ms">ПТС — это команда, которая делает событие видимым за пределами зала.</p>
-          <p class="lead reveal" style="--d:240ms">Дальше — режиссёрское вводное и практика на железе. Вопросы — сейчас.</p>
-          <div class="cta reveal" style="--d:360ms">Готовы к эфиру →</div>
+          <p class="quote reveal" style="--d:100ms">ПТС делает событие видимым за пределами зала.</p>
+          <p class="lead reveal" style="--d:220ms">Дальше — глубже в режиссуру и железо. Вопросы — сейчас.</p>
+          <div class="cta reveal" style="--d:320ms">Готовы к эфиру →</div>
         </div>
-        <div class="tile reveal-scale" style="--d:280ms">
+        <div class="tile reveal-scale" style="--d:240ms">
           <h3>ТЕХ ГУАП · ПТС</h3>
-          <p style="margin:0.8rem 0;color:var(--muted)">Руководитель направления трансляции:<br><strong style="color:var(--text)">Вадим Тоскин</strong></p>
-          <p style="color:var(--muted)">Вводное занятие · Попов<br>13.11.2025</p>
+          <p style="margin:0.8rem 0;color:var(--muted)">Руководитель направления:<br><strong style="color:var(--text)">Вадим Тоскин</strong></p>
+          <p style="color:var(--muted)">Вводное занятие<br>Трансляции: зачем и с чем едят</p>
         </div>
       </div>
     </section>
@@ -845,8 +1042,8 @@
     <div>ТЕХ ГУАП · ПТС</div>
     <div class="hint">
       <span class="key">←</span><span class="key">→</span>
-      <span>или пробел</span>
-      <span id="counter">1 / 17</span>
+      <span>шаг / слайд</span>
+      <span id="counter">1 / 16</span>
     </div>
   </div>
   <div class="progress-track"><div class="progress" id="progress"></div></div>
@@ -856,32 +1053,38 @@
     const counter = document.getElementById("counter");
     const progress = document.getElementById("progress");
     let i = 0;
+    let frag = -1;
     let animating = false;
 
-    function show(n, dir = 1) {
-      if (animating) return;
+    function frags(slide) {
+      return [...slide.querySelectorAll(".fragment")];
+    }
+
+    function setFrag(slide, index) {
+      const items = frags(slide);
+      items.forEach((el, n) => {
+        el.classList.toggle("visible", n <= index);
+        el.classList.toggle("hl", n === index && index >= 0);
+      });
+      frag = index;
+    }
+
+    function resetFrags(slide) {
+      setFrag(slide, -1);
+    }
+
+    function showSlide(n) {
       const next = Math.max(0, Math.min(slides.length - 1, n));
-      if (next === i && slides[i].classList.contains("active")) {
-        updateChrome();
-        return;
-      }
-      animating = true;
-      const prev = slides[i];
-      const curr = slides[next];
-
-      prev.classList.remove("active");
-      prev.classList.add(dir >= 0 ? "exit-left" : "active");
-      // force reflow for exit
-      void prev.offsetWidth;
-      prev.classList.remove("exit-left");
-
+      slides.forEach((s, idx) => {
+        const on = idx === next;
+        s.classList.toggle("active", on);
+        if (!on) resetFrags(s);
+      });
       i = next;
-      // reset reveals by toggling active off briefly
-      curr.classList.remove("active");
-      void curr.offsetWidth;
-      curr.classList.add("active");
+      frag = -1;
+      // If slide has fragments, start with none visible until first next
+      // For entry animation of non-fragment content, reveals still play via CSS
       updateChrome();
-      setTimeout(() => { animating = false; }, 520);
     }
 
     function updateChrome() {
@@ -889,8 +1092,33 @@
       progress.style.width = `${((i + 1) / slides.length) * 100}%`;
     }
 
-    function next() { show(i + 1, 1); }
-    function prev() { show(i - 1, -1); }
+    function next() {
+      if (animating) return;
+      const slide = slides[i];
+      const items = frags(slide);
+      if (items.length && frag < items.length - 1) {
+        setFrag(slide, frag + 1);
+        return;
+      }
+      if (i < slides.length - 1) showSlide(i + 1);
+    }
+
+    function prev() {
+      if (animating) return;
+      const slide = slides[i];
+      const items = frags(slide);
+      if (items.length && frag >= 0) {
+        setFrag(slide, frag - 1);
+        return;
+      }
+      if (i > 0) {
+        showSlide(i - 1);
+        // When going back to a fragment slide, show all fragments
+        const prevSlide = slides[i];
+        const prevItems = frags(prevSlide);
+        if (prevItems.length) setFrag(prevSlide, prevItems.length - 1);
+      }
+    }
 
     window.addEventListener("keydown", (e) => {
       if (["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"].includes(e.key)) {
@@ -901,9 +1129,9 @@
         e.preventDefault();
         prev();
       }
-      if (e.key === "Home") show(0, -1);
-      if (e.key === "End") show(slides.length - 1, 1);
-      if (e.key === "f" || e.key === "F" || e.key === "F11") {
+      if (e.key === "Home") showSlide(0);
+      if (e.key === "End") showSlide(slides.length - 1);
+      if (e.key === "f" || e.key === "F") {
         if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
         else document.exitFullscreen?.();
       }
@@ -924,7 +1152,7 @@
       else prev();
     });
 
-    updateChrome();
+    showSlide(0);
   </script>
 </body>
 </html>
