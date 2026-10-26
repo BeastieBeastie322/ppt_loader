@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ПТС · Оборудование для трансляций · ТЕХ ГУАП</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #12081c;
+      --bg-2: #1a0f2e;
+      --panel: rgba(36, 18, 58, 0.72);
+      --text: #f7eef5;
+      --muted: #c4a8bc;
+      --accent: #cc0c5e;
+      --accent-soft: #ff4d8d;
+      --accent-2: #3b1a69;
+      --line: rgba(255, 255, 255, 0.12);
+      --ok: #ff7eb3;
+      --safe: clamp(2rem, 5vw, 4.5rem);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Manrope", sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      background:
+        radial-gradient(1100px 700px at 8% -8%, rgba(204, 12, 94, 0.28), transparent 55%),
+        radial-gradient(900px 640px at 100% 0%, rgba(59, 26, 105, 0.55), transparent 52%),
+        radial-gradient(700px 500px at 70% 110%, rgba(204, 12, 94, 0.16), transparent 50%),
+        linear-gradient(160deg, #0e0616 0%, #1a0f2e 45%, #12081c 100%);
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .orb.a { width: 420px; height: 420px; background: #cc0c5e; top: -120px; left: -80px; }
+    .orb.b { width: 360px; height: 360px; background: #3b1a69; bottom: -140px; right: -60px; animation-duration: 22s; animation-delay: -4s; }
+    .orb.c { width: 280px; height: 280px; background: #ff4d8d; top: 40%; left: 55%; opacity: 0.18; animation-duration: 26s; }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(40px, -30px) scale(1.12); }
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.16;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse at center, black 35%, transparent 80%);
+    }
+
+    .deck { height: 100%; width: 100%; position: relative; z-index: 2; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: var(--safe);
+      padding-bottom: calc(var(--safe) + 1.2rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateX(36px) scale(0.985);
+      transition: opacity 0.45s ease, transform 0.45s ease, visibility 0.45s;
+    }
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(0) scale(1);
+    }
+
+    .eyebrow {
+      color: var(--accent-soft);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.85rem;
+    }
+    .eyebrow::before {
+      content: "";
+      display: inline-block;
+      width: 1.4rem;
+      height: 2px;
+      margin-right: 0.65rem;
+      vertical-align: middle;
+      background: var(--accent);
+    }
+
+    h1, h2, h3 { font-family: "Unbounded", sans-serif; font-weight: 600; line-height: 1.15; }
+    h1 { font-size: clamp(2.2rem, 5.5vw, 4.2rem); max-width: 16ch; }
+    h2 { font-size: clamp(1.7rem, 3.6vw, 2.8rem); margin-bottom: 0.5rem; }
+    h3 { font-size: 1.05rem; margin-bottom: 0.35rem; }
+
+    .sub {
+      color: var(--muted);
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      max-width: 48rem;
+      line-height: 1.5;
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-meta {
+      margin-top: 1.6rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+    .hero-meta strong { color: var(--text); font-weight: 600; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+      transition-delay: var(--d, 0ms);
+    }
+    .slide.active .reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.94);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      transition-delay: var(--d, 0ms);
+    }
+    .slide.active .reveal-scale {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .grid { display: grid; gap: 1rem; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .tile {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1.15rem 1.2rem;
+      backdrop-filter: blur(10px);
+      min-height: 8.5rem;
+    }
+    .tile .num {
+      font-family: "Unbounded", sans-serif;
+      color: var(--accent);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.55rem;
+    }
+    .tile p { color: var(--muted); font-size: 0.95rem; line-height: 1.45; }
+
+    .big-list { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 0.4rem; }
+    .big-list .item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(36, 18, 58, 0.45);
+    }
+    .big-list .n {
+      font-family: "Unbounded", sans-serif;
+      color: var(--accent);
+      font-size: 1rem;
+      min-width: 2.4rem;
+    }
+    .big-list h3 { margin: 0; font-size: 1.15rem; }
+    .big-list p { color: var(--muted); font-size: 0.92rem; margin-top: 0.2rem; }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0.7rem;
+      margin-top: 0.5rem;
+    }
+    .pipe {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem 0.9rem;
+      min-height: 7.5rem;
+      position: relative;
+    }
+    .pipe::after {
+      content: "→";
+      position: absolute;
+      right: -0.55rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent-soft);
+      font-size: 1.1rem;
+      opacity: 0.7;
+    }
+    .pipe:last-child::after { content: none; }
+
+    .fragment { opacity: 0; transform: translateY(10px); transition: opacity 0.35s ease, transform 0.35s ease, border-color 0.35s; }
+    .fragment.visible { opacity: 1; transform: translateY(0); }
+    .fragment.hl { border-color: rgba(204, 12, 94, 0.55); box-shadow: 0 0 0 1px rgba(204, 12, 94, 0.25); }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 1.4rem;
+      align-items: start;
+      margin-top: 0.3rem;
+    }
+    .lead {
+      color: var(--text);
+      font-size: 1.15rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .list-plain { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .list-plain li {
+      position: relative;
+      padding-left: 1.1rem;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 1.02rem;
+    }
+    .list-plain li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .list-plain strong { color: var(--text); font-weight: 600; }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1.2rem 1.3rem;
+    }
+    .panel h3 { color: var(--accent-soft); margin-bottom: 0.7rem; font-size: 0.95rem; letter-spacing: 0.04em; text-transform: uppercase; }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.9rem; }
+    .tag {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.28rem 0.75rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .tag.on {
+      color: var(--accent-soft);
+      border-color: rgba(204, 12, 94, 0.4);
+      background: rgba(204, 12, 94, 0.12);
+    }
+
+    .note {
+      margin-top: 1.1rem;
+      padding: 0.85rem 1rem;
+      border-left: 3px solid var(--accent);
+      background: rgba(204, 12, 94, 0.08);
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.45;
+      max-width: 52rem;
+    }
+    .note strong { color: var(--text); }
+
+    .chain {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.6rem;
+    }
+    .chain .tile { min-height: 7rem; }
+
+    .footer-bar {
+      position: fixed;
+      left: var(--safe);
+      right: var(--safe);
+      bottom: 0.85rem;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      pointer-events: none;
+    }
+    .hint { display: flex; align-items: center; gap: 0.55rem; }
+    .key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.5rem;
+      height: 1.5rem;
+      padding: 0 0.35rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.75rem;
+    }
+    .progress-track {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.06);
+      z-index: 6;
+    }
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+      transition: width 0.35s ease;
+    }
+
+    @media (max-width: 960px) {
+      .grid-3, .grid-4, .pipeline, .chain, .two-col { grid-template-columns: 1fr 1fr; }
+      .pipe::after { display: none; }
+      h1 { max-width: none; }
+    }
+    @media (max-width: 640px) {
+      .grid-2, .grid-3, .grid-4, .pipeline, .chain, .two-col { grid-template-columns: 1fr; }
+      .slide { padding: 1.4rem 1.2rem 3.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb a"></div>
+  <div class="orb b"></div>
+  <div class="orb c"></div>
+
+  <div class="deck" id="deck">
+
+    <!-- 1. Title -->
+    <section class="slide active hero" data-title="Титул">
+      <div class="eyebrow reveal">ТЕХ ГУАП · направление ПТС</div>
+      <h1 class="reveal" style="--d:100ms">Оборудование<br>для трансляций</h1>
+      <div class="hero-meta reveal" style="--d:260ms">
+        Железо эфира: от камеры до записи и стрима
+      </div>
+    </section>
+
+    <!-- 2. Agenda -->
+    <section class="slide" data-title="Вопросы">
+      <div class="eyebrow reveal">Сегодня</div>
+      <h2 class="reveal" style="--d:60ms">Вопросы на занятие</h2>
+      <p class="sub reveal" style="--d:120ms">Разберём узлы тракта — что это, зачем нужно и где стоит в цепочке.</p>
+      <div class="grid grid-2">
+        <div class="big-list">
+          <div class="item reveal" style="--d:180ms"><div class="n">01</div><div><h3>Камеры</h3></div></div>
+          <div class="item reveal" style="--d:220ms"><div class="n">02</div><div><h3>Карты ввода/вывода сигнала</h3></div></div>
+          <div class="item reveal" style="--d:260ms"><div class="n">03</div><div><h3>Видеокарты</h3></div></div>
+          <div class="item reveal" style="--d:300ms"><div class="n">04</div><div><h3>Сплиттеры</h3></div></div>
+        </div>
+        <div class="big-list">
+          <div class="item reveal" style="--d:340ms"><div class="n">05</div><div><h3>Матрицы (коммутаторы)</h3></div></div>
+          <div class="item reveal" style="--d:380ms"><div class="n">06</div><div><h3>Конверторы</h3></div></div>
+          <div class="item reveal" style="--d:420ms"><div class="n">07</div><div><h3>Звуковые карты</h3></div></div>
+          <div class="item reveal" style="--d:460ms"><div class="n">08</div><div><h3>Стриммеры и рекордеры</h3></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Pipeline context -->
+    <section class="slide" data-title="В тракте" data-fragments="1">
+      <div class="eyebrow">Карта</div>
+      <h2>Где живёт железо</h2>
+      <p class="sub">Каждый блок занятия — кусок пайплайна. Ломается эфир — ищем разрыв здесь.</p>
+      <div class="pipeline">
+        <div class="pipe fragment" data-frag="0">
+          <h3>Источник</h3>
+          <p style="color:var(--muted);font-size:0.92rem">Камеры, ПК, графика</p>
+        </div>
+        <div class="pipe fragment" data-frag="1">
+          <h3>Сигнал</h3>
+          <p style="color:var(--muted);font-size:0.92rem">Сплиттеры, матрицы, конверторы</p>
+        </div>
+        <div class="pipe fragment" data-frag="2">
+          <h3>Микшер</h3>
+          <p style="color:var(--muted);font-size:0.92rem">Карты I/O, GPU, звук</p>
+        </div>
+        <div class="pipe fragment" data-frag="3">
+          <h3>Доставка</h3>
+          <p style="color:var(--muted);font-size:0.92rem">Стриммеры, рекордеры</p>
+        </div>
+        <div class="pipe fragment" data-frag="4">
+          <h3>Зритель</h3>
+          <p style="color:var(--muted);font-size:0.92rem">Платформа, экран, архив</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Cameras -->
+    <section class="slide" data-title="Камеры">
+      <div class="eyebrow reveal">01 · Источник</div>
+      <h2 class="reveal" style="--d:60ms">Камеры</h2>
+      <p class="sub reveal" style="--d:120ms">Точка входа картинки в тракт. Без стабильного сигнала с камеры дальше чинить бессмысленно.</p>
+      <div class="two-col">
+        <div class="reveal" style="--d:180ms">
+          <p class="lead">Камера даёт кадр и формат сигнала. Важно не «какая красивее», а что уходит в кабель.</p>
+          <ul class="list-plain">
+            <li><strong>Тип:</strong> PTZ, камкордер, cinema/box, веб для простых эфиров</li>
+            <li><strong>Выход:</strong> SDI / HDMI / NDI — что реально доступно на площадке</li>
+            <li><strong>Параметры:</strong> разрешение, частота кадров, цветовое пространство</li>
+            <li><strong>Управление:</strong> фокус, зум, экспозиция, баланс белого</li>
+          </ul>
+        </div>
+        <div class="panel reveal-scale" style="--d:260ms">
+          <h3>На смене проверяем</h3>
+          <ul class="list-plain">
+            <li>Питание и запись/standby</li>
+            <li>Правильный выход и кабель</li>
+            <li>Совпадение формата с входом микшера</li>
+            <li>Запасной ракурс / запасная камера</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag on">SDI</span>
+            <span class="tag on">HDMI</span>
+            <span class="tag">NDI</span>
+            <span class="tag">PTZ</span>
+          </div>
+        </div>
+      </div>
+      <div class="note reveal" style="--d:340ms"><strong>Практика:</strong> «No Signal» почти всегда начинается у камеры, разъёма или питания — не у стрима.</div>
+    </section>
+
+    <!-- 5. Capture cards -->
+    <section class="slide" data-title="Карты I/O">
+      <div class="eyebrow reveal">02 · Вход в ПК</div>
+      <h2 class="reveal" style="--d:60ms">Карты ввода/вывода сигнала</h2>
+      <p class="sub reveal" style="--d:120ms">Мост между «проводом» и компьютером: HDMI/SDI ↔ USB/PCIe.</p>
+      <div class="grid grid-3">
+        <div class="tile reveal-scale" style="--d:180ms">
+          <div class="num">ВВОД</div>
+          <h3>Capture</h3>
+          <p>Камера или пульт → ПК. Карта принимает сигнал и отдаёт его в vMix / OBS как источник.</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:260ms">
+          <div class="num">ВЫВОД</div>
+          <h3>Playback / key</h3>
+          <p>ПК → экран зала, IMAG, внешний рекордер. Нужен, когда программа должна уйти «в железо».</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:340ms">
+          <div class="num">ФОРМАТ</div>
+          <h3>Совместимость</h3>
+          <p>Интерфейс (USB / PCIe), число входов, поддержка 1080p/4K, latency, драйверы.</p>
+        </div>
+      </div>
+      <div class="note reveal" style="--d:420ms"><strong>Типичные имена:</strong> Blackmagic DeckLink / Intensity, Magewell, Elgato Cam Link — роль одна: ввести или вывести сигнал без сюрпризов.</div>
+    </section>
+
+    <!-- 6. GPU -->
+    <section class="slide" data-title="Видеокарты">
+      <div class="eyebrow reveal">03 · Производительность</div>
+      <h2 class="reveal" style="--d:60ms">Видеокарты</h2>
+      <p class="sub reveal" style="--d:120ms">GPU в эфирной машине — не «для игр», а для декодирования, композиции и кодирования стрима.</p>
+      <div class="two-col">
+        <div class="reveal" style="--d:180ms">
+          <ul class="list-plain">
+            <li><strong>Композиция:</strong> многослойный микшер, переходы, ключи, NDI</li>
+            <li><strong>Кодек:</strong> аппаратный энкодер (NVENC / AMF / Quick Sync)</li>
+            <li><strong>Мониторинг:</strong> несколько выходов на превью-экраны</li>
+            <li><strong>Запас:</strong> чем больше входов и эффектов — тем выше нагрузка</li>
+          </ul>
+        </div>
+        <div class="panel reveal-scale" style="--d:260ms">
+          <h3>На что смотреть</h3>
+          <ul class="list-plain">
+            <li>VRAM и поддержка нужных кодеков</li>
+            <li>Число мониторных выходов</li>
+            <li>Температура и питание под длительный эфир</li>
+            <li>Драйвер, который не обновляют «в день шоу»</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note reveal" style="--d:340ms"><strong>Правило:</strong> стрим упирается либо в сеть, либо в энкодер. Видеокарта — страховка от «плывущего» FPS в программе.</div>
+    </section>
+
+    <!-- 7. Splitters -->
+    <section class="slide" data-title="Сплиттеры">
+      <div class="eyebrow reveal">04 · Размножение</div>
+      <h2 class="reveal" style="--d:60ms">Сплиттеры</h2>
+      <p class="sub reveal" style="--d:120ms">Один источник — несколько потребителей. Картинку нужно и в микшер, и на превью, и в запись.</p>
+      <div class="grid grid-3">
+        <div class="tile reveal-scale" style="--d:180ms">
+          <div class="num">1→N</div>
+          <h3>Задача</h3>
+          <p>Развести один HDMI/SDI на несколько устройств без потери основного сигнала.</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:260ms">
+          <div class="num">ГДЕ</div>
+          <h3>Типовые места</h3>
+          <p>Камера → микшер + рекордер; программа → экран зала + стрим-вход; презентация спикера → ноут и эфир.</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:340ms">
+          <div class="num">ВАЖНО</div>
+          <h3>Активный vs пассивный</h3>
+          <p>Пассивный «разветвитель» часто врёт. Для эфира — активный сплиттер / DA с питанием и реклоком.</p>
+        </div>
+      </div>
+      <div class="note reveal" style="--d:420ms"><strong>Не путать:</strong> сплиттер копирует один и тот же сигнал. Матрица умеет выбирать, кто куда идёт.</div>
+    </section>
+
+    <!-- 8. Matrices -->
+    <section class="slide" data-title="Матрицы">
+      <div class="eyebrow reveal">05 · Коммутация</div>
+      <h2 class="reveal" style="--d:60ms">Матрицы (коммутаторы)</h2>
+      <p class="sub reveal" style="--d:120ms">M×N: несколько входов, несколько выходов. Сердце гибкой схемы на площадке.</p>
+      <div class="two-col">
+        <div class="reveal" style="--d:180ms">
+          <p class="lead">Матрица решает, какой источник окажется на каком выходе — без перетыкания кабелей в эфире.</p>
+          <ul class="list-plain">
+            <li><strong>Входы:</strong> камеры, ПК, пульты, плееры</li>
+            <li><strong>Выходы:</strong> микшер, экраны, рекордеры, запасные линии</li>
+            <li><strong>Управление:</strong> кнопки, софт, пресеты сцен</li>
+          </ul>
+        </div>
+        <div class="panel reveal-scale" style="--d:260ms">
+          <h3>Зачем на трансляции</h3>
+          <ul class="list-plain">
+            <li>Быстрая смена расклада под блок программы</li>
+            <li>Резервный путь сигнала</li>
+            <li>Разные картины для зала и эфира</li>
+            <li>Порядок вместо «паутины» кабелей</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag on">SDI matrix</span>
+            <span class="tag on">HDMI matrix</span>
+            <span class="tag">AV switcher</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Converters -->
+    <section class="slide" data-title="Конверторы">
+      <div class="eyebrow reveal">06 · Согласование</div>
+      <h2 class="reveal" style="--d:60ms">Конверторы</h2>
+      <p class="sub reveal" style="--d:120ms">Когда форматы не совпали: HDMI↔SDI, уровнями, частотой, иногда — сетью (NDI/SRT).</p>
+      <div class="grid grid-2">
+        <div class="tile reveal-scale" style="--d:180ms">
+          <div class="num">ИНТЕРФЕЙС</div>
+          <h3>HDMI ↔ SDI</h3>
+          <p>Самый частый кейс на площадке: камера HDMI, тракт SDI — или наоборот.</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:240ms">
+          <div class="num">ФОРМАТ</div>
+          <h3>Up/Down/Cross</h3>
+          <p>1080i↔1080p, 4K→HD, смена частоты кадров. Без этого микшер «не видит» вход.</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:300ms">
+          <div class="num">СЕТЬ</div>
+          <h3>AV over IP</h3>
+          <p>Конвертеры в NDI / SRT / RTSP — сигнал едет по Ethernet, когда кабеля «по видео» не хватает.</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:360ms">
+          <div class="num">СИГНАЛ</div>
+          <h3>Распределение</h3>
+          <p>Усилители, reclocking, оптоволокно на длинных линиях — тоже зона конвертации/транспорта.</p>
+        </div>
+      </div>
+      <div class="note reveal" style="--d:440ms"><strong>Чеклист:</strong> входной разъём → выходной разъём → совпал ли формат → горит ли lock на приёмнике.</div>
+    </section>
+
+    <!-- 10. Audio interfaces -->
+    <section class="slide" data-title="Звук">
+      <div class="eyebrow reveal">07 · Аудиотракт</div>
+      <h2 class="reveal" style="--d:60ms">Звуковые карты</h2>
+      <p class="sub reveal" style="--d:120ms">Картинка без звука — ещё полбеды. Звук без синхрона и уровня — уже авария эфира.</p>
+      <div class="two-col">
+        <div class="reveal" style="--d:180ms">
+          <ul class="list-plain">
+            <li><strong>Роль:</strong> ввести микрофоны / пульт в ПК или вывести программу в зал</li>
+            <li><strong>Интерфейсы:</strong> XLR, TRS, Dante, USB, встроенный audio на SDI/HDMI</li>
+            <li><strong>Контроль:</strong> уровни, клиппинг, мониторинг в наушниках</li>
+            <li><strong>Синхрон:</strong> звук не должен «уплывать» от губ на камере</li>
+          </ul>
+        </div>
+        <div class="panel reveal-scale" style="--d:260ms">
+          <h3>Связка с ПТС</h3>
+          <ul class="list-plain">
+            <li>Часто звук отдаёт звукорежиссёр, а ПТС забирает программу / M&E</li>
+            <li>В vMix — отдельный аудиомикс под стрим и запись</li>
+            <li>Запасной путь: встроенный звук с камеры</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note reveal" style="--d:340ms"><strong>Правило эфира:</strong> сначала слышно и ровно, потом «красиво». Уровень и отсутствие шума важнее эффектов.</div>
+    </section>
+
+    <!-- 11. Streamers & recorders -->
+    <section class="slide" data-title="Стрим / запись">
+      <div class="eyebrow reveal">08 · Доставка и архив</div>
+      <h2 class="reveal" style="--d:60ms">Стриммеры и рекордеры</h2>
+      <p class="sub reveal" style="--d:120ms">Финиш тракта: отдать зрителю live и/или сохранить «как было».</p>
+      <div class="grid grid-2">
+        <div class="tile reveal-scale" style="--d:180ms">
+          <div class="num">STREAM</div>
+          <h3>Стриммеры</h3>
+          <p>Железо или модуль, который кодирует программу и шлёт по RTMP/SRT/NDI на платформу. Может быть отдельным устройством или функцией vMix.</p>
+          <div class="tag-row">
+            <span class="tag on">RTMP</span>
+            <span class="tag on">SRT</span>
+            <span class="tag">мультистрим</span>
+          </div>
+        </div>
+        <div class="tile reveal-scale" style="--d:260ms">
+          <div class="num">RECORD</div>
+          <h3>Рекордеры</h3>
+          <p>Пишут программу или ISO-камеры на диск/SSD. Нужны для архива, нарезок, отчётности и страховки, если стрим упал.</p>
+          <div class="tag-row">
+            <span class="tag on">Program</div>
+            <span class="tag on">ISO</span>
+            <span class="tag">SSD / NAS</span>
+          </div>
+        </div>
+      </div>
+      <div class="note reveal" style="--d:340ms"><strong>На смене:</strong> запись включаем до «мы в эфире». Стрим без локального файла — риск потерять мероприятие целиком.</div>
+    </section>
+
+    <!-- 12. How it connects -->
+    <section class="slide" data-title="Схема" data-fragments="1">
+      <div class="eyebrow">Сборка</div>
+      <h2>Как это стыкуется</h2>
+      <p class="sub">Минимальная рабочая схема эфира — и где какой узел отвечает.</p>
+      <div class="chain">
+        <div class="tile fragment" data-frag="0">
+          <div class="num">01</div>
+          <h3>Камера</h3>
+          <p>Источник кадра и первичный сигнал</p>
+        </div>
+        <div class="tile fragment" data-frag="1">
+          <div class="num">02</div>
+          <h3>Конвертор / сплит / матрица</h3>
+          <p>Согласовать, размножить, направить</p>
+        </div>
+        <div class="tile fragment" data-frag="2">
+          <div class="num">03</div>
+          <h3>Карта I/O + GPU + звук</h3>
+          <p>Собрать программу в ПК / микшере</p>
+        </div>
+        <div class="tile fragment" data-frag="3">
+          <div class="num">04</div>
+          <h3>Стриммер + рекордер</h3>
+          <p>Отдать live и сохранить архив</p>
+        </div>
+      </div>
+      <div class="note fragment" data-frag="4" style="margin-top:1.2rem"><strong>Диагностика:</strong> идите слева направо. Где последний раз сигнал был живой — там и чините.</div>
+    </section>
+
+    <!-- 13. Summary -->
+    <section class="slide" data-title="Итог">
+      <div class="eyebrow reveal">Итог</div>
+      <h2 class="reveal" style="--d:60ms">Что зафиксировать</h2>
+      <p class="sub reveal" style="--d:120ms">Оборудование — это не склад коробок, а роли в пайплайне.</p>
+      <div class="grid grid-2">
+        <div class="big-list">
+          <div class="item reveal" style="--d:180ms"><div class="n">01</div><div><h3>Источник</h3><p>Камеры задают кадр и формат</p></div></div>
+          <div class="item reveal" style="--d:220ms"><div class="n">02</div><div><h3>Тракт</h3><p>Сплиттеры, матрицы, конверторы ведут сигнал</p></div></div>
+        </div>
+        <div class="big-list">
+          <div class="item reveal" style="--d:260ms"><div class="n">03</div><div><h3>Микшерный узел</h3><p>Карты I/O, GPU, звуковая карта собирают программу</p></div></div>
+          <div class="item reveal" style="--d:300ms"><div class="n">04</div><div><h3>Выход</h3><p>Стриммер отдаёт live, рекордер — архив</p></div></div>
+        </div>
+      </div>
+      <div class="note reveal" style="--d:360ms"><strong>Дальше:</strong> на практике увидим железо вживую и соберём простую схему под «нулевую» трансляцию.</div>
+    </section>
+
+  </div>
+
+  <div class="footer-bar">
+    <div>ТЕХ ГУАП · ПТС</div>
+    <div class="hint">
+      <span class="key">←</span><span class="key">→</span>
+      <span>шаг / слайд</span>
+      <span id="counter">1 / 13</span>
+    </div>
+  </div>
+  <div class="progress-track"><div class="progress" id="progress"></div></div>
+
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    const counter = document.getElementById("counter");
+    const progress = document.getElementById("progress");
+    let i = 0;
+    let frag = -1;
+    let animating = false;
+
+    function frags(slide) {
+      return [...slide.querySelectorAll(".fragment")];
+    }
+
+    function setFrag(slide, index) {
+      const items = frags(slide);
+      items.forEach((el, n) => {
+        el.classList.toggle("visible", n <= index);
+        el.classList.toggle("hl", n === index && index >= 0);
+      });
+      frag = index;
+    }
+
+    function resetFrags(slide) {
+      setFrag(slide, -1);
+    }
+
+    function showSlide(n) {
+      const next = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach((s, idx) => {
+        const on = idx === next;
+        s.classList.toggle("active", on);
+        if (!on) resetFrags(s);
+      });
+      i = next;
+      frag = -1;
+      updateChrome();
+    }
+
+    function updateChrome() {
+      counter.textContent = `${i + 1} / ${slides.length}`;
+      progress.style.width = `${((i + 1) / slides.length) * 100}%`;
+    }
+
+    function next() {
+      if (animating) return;
+      const slide = slides[i];
+      const items = frags(slide);
+      if (items.length && frag < items.length - 1) {
+        setFrag(slide, frag + 1);
+        return;
+      }
+      if (i < slides.length - 1) showSlide(i + 1);
+    }
+
+    function prev() {
+      if (animating) return;
+      const slide = slides[i];
+      const items = frags(slide);
+      if (items.length && frag >= 0) {
+        setFrag(slide, frag - 1);
+        return;
+      }
+      if (i > 0) {
+        showSlide(i - 1);
+        const prevSlide = slides[i];
+        const prevItems = frags(prevSlide);
+        if (prevItems.length) setFrag(prevSlide, prevItems.length - 1);
+      }
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"].includes(e.key)) {
+        e.preventDefault();
+        next();
+      }
+      if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(e.key)) {
+        e.preventDefault();
+        prev();
+      }
+      if (e.key === "Home") showSlide(0);
+      if (e.key === "End") showSlide(slides.length - 1);
+      if (e.key === "f" || e.key === "F") {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+        else document.exitFullscreen?.();
+      }
+    });
+
+    let touchX = null;
+    window.addEventListener("touchstart", (e) => { touchX = e.changedTouches[0].screenX; }, { passive: true });
+    window.addEventListener("touchend", (e) => {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].screenX - touchX;
+      if (Math.abs(dx) > 40) dx < 0 ? next() : prev();
+      touchX = null;
+    }, { passive: true });
+
+    document.body.addEventListener("click", (e) => {
+      if (e.target.closest("a, button")) return;
+      if (e.clientX > window.innerWidth * 0.55) next();
+      else prev();
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>
