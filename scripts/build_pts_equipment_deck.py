@@ -237,7 +237,7 @@ def build() -> None:
         </ul>
         <div class="note reveal" style="--d:220ms"><strong>В первую очередь проверяем здесь:</strong> формат, выход и другие параметры источника.</div>
       </div>
-      {photo("cam-tripod.jpg", "Камера на штативе", "Wikimedia Commons · Blackmagic URSA")}
+      {photo("user-camera.jpg", "Камера", "", contain=True)}
     </section>"""
     )
 
@@ -308,7 +308,7 @@ def build() -> None:
         <div class="tile reveal-scale" style="--d:120ms"><img src="{img('cable-hdmi-plug.jpg')}" alt="HDMI"/><div class="num">HDMI</div><h3>HDMI</h3><p>Бытовой/компьютерный видео+звук. Короткие линии, чувствителен к качеству кабеля.</p></div>
         <div class="tile reveal-scale" style="--d:160ms"><img src="{img('bnc.jpg')}" alt="BNC"/><div class="num">SDI</div><h3>SDI (BNC)</h3><p>Профессиональное видео. Level A / Level B — разные упаковки 3G-SDI. Длиннее HDMI, надёжнее на площадке.</p></div>
         <div class="tile reveal-scale" style="--d:200ms"><img src="{img('cable-xlr.jpg')}" alt="XLR"/><div class="num">XLR</div><h3>XLR</h3><p>Балансный звуковой интерфейс для микрофонов и линейных сигналов.</p></div>
-        <div class="tile reveal-scale" style="--d:240ms"><img src="{img('rj45-plug.jpg')}" alt="RJ45"/><div class="num">ETH</div><h3>Ethernet</h3><p>Сеть, управление, стрим и другие средства передачи по IP.</p></div>
+        <div class="tile reveal-scale" style="--d:240ms"><img class="fit" src="{img('user-rj45.jpg')}" alt="RJ45"/><div class="num">ETH</div><h3>Ethernet</h3><p>Сеть, управление, стрим и другие средства передачи по IP.</p></div>
       </div>
     </section>"""
     )
@@ -363,7 +363,7 @@ def build() -> None:
         </ul>
         <div class="note reveal" style="--d:220ms"><strong>Ошибка новичка:</strong> ожидать от адаптера работу конвертера стандартов.</div>
       </div>
-      {photo("adapter-hdmi-dvi.jpg", "Адаптер HDMI–DVI", "Wikimedia Commons", contain=True)}
+      {photo("user-hdmi-dvi.jpg", "Адаптер HDMI–DVI", "", contain=True)}
     </section>"""
     )
 
@@ -379,7 +379,7 @@ def build() -> None:
           <li>Пассивный разветвитель повышает риск потери уровня и срыва приёма</li>
         </ul>
       </div>
-      {photo("hdmi-splitter.jpg", "HDMI splitter", "", contain=True)}
+      {photo("user-hdmi-splitter.jpg", "HDMI splitter 1×4", "", contain=True)}
     </section>"""
     )
 
@@ -396,7 +396,7 @@ def build() -> None:
           <li><strong>Пассивные разветвители</strong> делят энергию сигнала между несколькими выходами и поэтому менее предпочтительны в эфирном тракте, чем активные устройства распределения</li>
         </ul>
       </div>
-      {photo("bnc-barrel.jpg", "BNC barrel", "", contain=True)}
+      {photo("user-bnc-barrel.jpg", "BNC barrel", "", contain=True)}
     </section>"""
     )
 
@@ -476,7 +476,7 @@ def build() -> None:
           </ul>
         </div>
       </div>
-      {photo("video-scaler.jpg", "Video scaler", "", contain=True)}
+      {photo("user-scaler.jpg", "Roland VC-100UHD", "Roland · VC-100UHD", contain=True)}
     </section>"""
     )
 
@@ -493,7 +493,7 @@ def build() -> None:
           <li>Пресеты снижают необходимость перекоммутации в эфире</li>
         </ul>
       </div>
-      {dual_photo("bmd-videohub.jpg", "Videohub спереди", "videohub-rear.jpg", "Videohub сзади", "Спереди — управление; сзади — разъёмы")}
+      {photo("user-videohub-both.jpg", "Smart Videohub 20×20", "Спереди — управление; сзади — разъёмы SDI", contain=True)}
     </section>"""
     )
 
@@ -506,14 +506,14 @@ def build() -> None:
       <div class="grid grid-2">
         <div class="tile reveal-scale" style="--d:120ms">
           <div class="cap">USB capture — внешний бокс</div>
-          <img class="fit" src="{img('capture-usb2.jpg')}" alt="USB capture"/>
+          <img class="fit" src="{img('user-capture-usb.jpg')}" alt="USB capture"/>
           <div class="num">USB</div>
           <h3>Внешняя карта / бокс USB</h3>
           <p>Подключается к порту USB. Удобна для ноутбука. Полоса делится с другими устройствами; стабильность зависит от чипа и драйвера.</p>
         </div>
         <div class="tile reveal-scale" style="--d:180ms">
           <div class="cap">PCIe capture — плата внутрь ПК</div>
-          <img class="fit" src="{img('capture-datapath.jpg')}" alt="PCIe capture"/>
+          <img class="fit" src="{img('user-capture-pcie.jpg')}" alt="PCIe capture"/>
           <div class="num">PCIe</div>
           <h3>Внутренняя плата PCIe</h3>
           <p>Устанавливается в слот системной платы (линии x4/x8/x16). Выше запас по полосе, удобнее многоканальные входы.</p>
@@ -532,15 +532,15 @@ def build() -> None:
       <div class="grid grid-2">
         <div class="tile reveal-scale" style="--d:120ms">
           <div class="cap">Внешний бокс вывода</div>
-          <img class="fit" src="{img('bmd-monitor-out.jpg')}" alt="UltraStudio Monitor"/>
-          <h3>Blackmagic UltraStudio Monitor (пример)</h3>
+          <img class="fit" src="{img('user-ultrastudio-monitor.jpg')}" alt="UltraStudio Monitor 3G"/>
+          <h3>Blackmagic UltraStudio Monitor 3G</h3>
           <p>Внешнее устройство: принимает программу со станции и отдаёт её в SDI/HDMI эфирного тракта или на контрольный монитор.</p>
         </div>
         <div class="tile reveal-scale" style="--d:180ms">
-          <div class="cap">Внутренняя PCIe-плата вывода</div>
-          <img class="fit" src="{img('pcie-output-card.jpg')}" alt="PCIe SDI HDMI out"/>
-          <h3>PCIe SDI + HDMI playback</h3>
-          <p>Плата в слот ПК с выходами SDI и HDMI. Типовая роль — playback / program out в профессиональный тракт.</p>
+          <div class="cap">Внутренняя PCIe-плата (SDI + HDMI)</div>
+          <img class="fit" src="{img('user-pcie-sdi-hdmi.jpg')}" alt="PCIe SDI HDMI"/>
+          <h3>PCIe SDI + HDMI</h3>
+          <p>Плата в слот ПК с разъёмами SDI и HDMI. Типовая роль — захват и/или playback в профессиональный тракт.</p>
         </div>
       </div>
       <div class="note reveal" style="--d:240ms"><strong>Связка:</strong> захват → обработка на станции → вывод. HDMI ноутбука/ПК — всегда только выход и не заменяет вход захвата.</div>
