@@ -127,6 +127,21 @@ h3{font-size:1rem;margin-bottom:.3rem}
 @media (max-width:640px){
   .grid-2,.grid-3,.grid-4,.pipeline{grid-template-columns:1fr}
 }
+
+.slide.solo{max-width:56rem}
+.dual-photo{display:grid;grid-template-rows:1fr 1fr;gap:.55rem;height:100%;min-height:min(58vh,520px)}
+.dual-photo .photo-panel{min-height:0;max-height:none;height:100%}
+.flow{display:flex;flex-wrap:wrap;gap:.55rem;align-items:stretch;margin-top:.55rem}
+.flow-node{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.7rem .85rem;min-width:7.2rem;text-align:center}
+.flow-node .role{display:block;font-family:Unbounded,sans-serif;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-soft);margin-bottom:.25rem}
+.flow-node .name{font-size:.92rem;font-weight:600}
+.flow-edge{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:3.2rem;color:var(--accent-soft);font-size:.78rem;gap:.12rem}
+.flow-edge .wire{font-family:Unbounded,sans-serif;font-size:.7rem;letter-spacing:.04em;padding:.12rem .4rem;border:1px solid rgba(204,12,94,.45);border-radius:999px;color:var(--accent-soft)}
+.flow-edge.bad .wire{border-color:rgba(255,120,80,.75);color:#ffb090;background:rgba(255,100,60,.12)}
+.answer-box{margin-top:.85rem;padding:1rem 1.1rem;border:1px solid rgba(204,12,94,.35);border-radius:12px;background:rgba(204,12,94,.1)}
+.answer-box h3{margin-bottom:.45rem}
+.tile .cap{font-family:Unbounded,sans-serif;font-size:.72rem;color:var(--accent-soft);letter-spacing:.05em;text-transform:uppercase;margin:.15rem 0 .45rem}
+.tile img.fit{object-fit:contain;background:#12081c;height:130px}
 """
 
 JS = r"""
@@ -155,23 +170,46 @@ showSlide(0);
 """
 
 
+def node(role: str, name: str) -> str:
+    return (
+        f'<div class="flow-node"><span class="role">{role}</span>'
+        f'<span class="name">{name}</span></div>'
+    )
+
+
+def edge(label: str, *, bad: bool = False) -> str:
+    cls = "flow-edge bad" if bad else "flow-edge"
+    return (
+        f'<div class="{cls}"><span>→</span>'
+        f'<span class="wire">{label}</span></div>'
+    )
+
+
+def dual_photo(a: str, alt_a: str, b: str, alt_b: str, credit: str = "") -> str:
+    cap = f'<div class="photo-credit">{credit}</div>' if credit else ""
+    return (
+        '<div class="dual-photo">'
+        f'<div class="photo-panel"><img src="{img(a)}" alt="{alt_a}" /></div>'
+        f'<div class="photo-panel"><img src="{img(b)}" alt="{alt_b}" />{cap}</div>'
+        "</div>"
+    )
+
+
 def build() -> None:
     slides: list[str] = []
 
-    # 1 Title
-    slides.append(f'''
-    <section class="slide active split" data-title="Титул">
-      <div class="copy">
-        <div class="eyebrow reveal">ТЕХ ГУАП · направление ПТС</div>
-        <h1 class="reveal" style="--d:80ms">Оборудование<br>для трансляций</h1>
-        <p class="sub reveal" style="--d:160ms">Какая задача → какое соединение → какое оборудование</p>
-        <div class="hero-meta reveal" style="--d:240ms">Не спецификации наизусть — логика тракта</div>
-      </div>
-      {photo("live-setup.jpg", "Стойка трансляции", "Wikimedia Commons")}
-    </section>''')
+    slides.append(
+        """
+    <section class="slide active solo" data-title="Титул">
+      <div class="eyebrow reveal">ТЕХ ГУАП · направление ПТС</div>
+      <h1 class="reveal" style="--d:80ms">Оборудование<br>для трансляций</h1>
+      <p class="sub reveal" style="--d:160ms">Какая задача → какое соединение → какое оборудование</p>
+      <div class="hero-meta reveal" style="--d:240ms">Не спецификации наизусть — логика тракта</div>
+    </section>"""
+    )
 
-    # 2 Map
-    slides.append(f'''
+    slides.append(
+        """
     <section class="slide" data-title="Карта мира" data-fragments="1">
       <div class="eyebrow">Вступление</div>
       <h2>Карта мира эфира</h2>
@@ -183,182 +221,191 @@ def build() -> None:
         <div class="pipe fragment"><h3>Вывод</h3><p>Стрим, запись, экраны зала</p></div>
       </div>
       <div class="note fragment"><strong>Мысль занятия:</strong> сначала задача, потом тип соединения, потом железо — а не наоборот.</div>
-    </section>''')
+    </section>"""
+    )
 
-    # 3 Cameras
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Камеры">
       <div class="copy">
         <div class="eyebrow reveal">Источник · 01</div>
         <h2 class="reveal" style="--d:60ms">Камеры</h2>
-        <p class="sub reveal" style="--d:100ms"><strong>Источник сигнала</strong> — устройство, которое впервые формирует видео. Камера отдаёт кадр + метаданные формата в кабель или сеть.</p>
+        <p class="sub reveal" style="--d:100ms"><strong>Источник сигнала</strong> — устройство, которое впервые формирует видео. Камера отдаёт кадр и параметры формата в кабель или сеть.</p>
         <ul class="list-plain reveal" style="--d:160ms">
-          <li><strong>PTZ</strong> — pan/tilt/zoom, управление по сети (VISCA/IP)</li>
-          <li><strong>Камкордер / cinema</strong> — ручная работа оператора</li>
           <li><strong>Выход:</strong> SDI (BNC), HDMI, иногда NDI</li>
-          <li><strong>Параметры:</strong> разрешение, fps, progressive/interlace</li>
+          <li><strong>Параметры:</strong> разрешение, частота кадров, progressive / interlace</li>
         </ul>
-        <div class="note reveal" style="--d:220ms"><strong>Термин:</strong> «лок» сигнала — приёмник видит стабильный вход. Нет лока — дальше чинить бессмысленно.</div>
+        <div class="note reveal" style="--d:220ms"><strong>В первую очередь проверяем здесь:</strong> формат, выход и другие параметры источника.</div>
       </div>
       {photo("cam-tripod.jpg", "Камера на штативе", "Wikimedia Commons · Blackmagic URSA")}
-    </section>''')
+    </section>"""
+    )
 
-    # 4 PC
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="ПК">
       <div class="copy">
         <div class="eyebrow reveal">Источник · 02</div>
         <h2 class="reveal" style="--d:60ms">ПК и ноутбуки</h2>
-        <p class="sub reveal" style="--d:100ms">Компьютер — источник <strong>компьютерной графики</strong>: презентации, браузер, vMix/графика, Zoom-окно.</p>
+        <p class="sub reveal" style="--d:100ms">Компьютер — источник <strong>компьютерной графики</strong>: презентации, браузер, окна приложений, графика микшера.</p>
         <ul class="list-plain reveal" style="--d:160ms">
           <li><strong>Выход:</strong> HDMI / DisplayPort / USB-C → адаптер</li>
-          <li><strong>EDID</strong> — «паспорт» монитора; без него ПК может отдать «не тот» режим</li>
-          <li><strong>Важно:</strong> HDMI на ноутбуке/ПК — почти всегда <em>только выход</em>, не вход</li>
+          <li><strong>Сетевые протоколы:</strong> NDI, SRT, RTMP и другие пути «по IP»</li>
+          <li><strong>EDID</strong> — данные о возможностях дисплея; без них ПК может отдать неверный режим</li>
+          <li><strong>Важно:</strong> HDMI на ноутбуке/ПК — <em>всегда</em> только выход, не вход</li>
         </ul>
         <div class="tag-row reveal" style="--d:220ms">
-          <span class="tag on">презентация</span><span class="tag on">браузер</span><span class="tag">NDI Screen Capture</span>
+          <span class="tag on">презентация</span><span class="tag on">браузер</span><span class="tag on">сетевые протоколы</span>
         </div>
       </div>
       {photo("laptop.jpg", "Ноутбук с презентацией", "Wikimedia Commons")}
-    </section>''')
+    </section>"""
+    )
 
-    # 5 Other sources
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Внешний сигнал">
       <div class="copy">
         <div class="eyebrow reveal">Источник · 03</div>
         <h2 class="reveal" style="--d:60ms">Другие устройства</h2>
         <p class="sub reveal" style="--d:100ms">Внешний сигнал — уже собранная программа с другого микшера, плеера, медиасервера, телемоста.</p>
         <ul class="list-plain reveal" style="--d:160ms">
-          <li><strong>PGM с другого пульта</strong> — «чистая» программа в наш тракт</li>
-          <li><strong>Плеер / медиасервер</strong> — ролики, заставки, таймкод</li>
-          <li><strong>ВКС / телемост</strong> — удалённый спикер как отдельный вход</li>
+          <li><strong>PGM с другого пульта</strong> — готовая программа в наш тракт</li>
+          <li><strong>Плеер / медиасервер</strong> — ролики, заставки</li>
+          <li><strong>ВКС / телемост</strong> — удалённый участник как отдельный вход</li>
         </ul>
-        <div class="note reveal" style="--d:220ms"><strong>Практика:</strong> внешний сигнал тоже источник. У него есть формат и интерфейс — согласуйте так же, как камеру.</div>
+        <div class="note reveal" style="--d:220ms"><strong>Запомните:</strong> внешний сигнал тоже источник. У него есть формат и интерфейс — согласуйте их так же, как у камеры.</div>
       </div>
       {photo("bmd-atem.jpg", "Видеомикшер как источник", "Wikimedia Commons · Blackmagic ATEM")}
-    </section>''')
+    </section>"""
+    )
 
-    # 6 Path overview
-    slides.append(f'''
-    <section class="slide split" data-title="Путь сигнала">
+    slides.append(
+        f"""
+    <section class="slide split" data-title="Тракт сигнала">
       <div class="copy">
         <div class="eyebrow reveal">Путь</div>
-        <h2 class="reveal" style="--d:60ms">Как сигнал доезжает</h2>
-        <p class="sub reveal" style="--d:100ms">Между источником и обработкой сигнал идёт по кабелю, по сети или через «коробочки»-преобразователи — из‑за разных разъёмов, длин линий и форматов.</p>
+        <h2 class="reveal" style="--d:60ms">Тракт сигнала</h2>
+        <p class="sub reveal" style="--d:100ms">Между источником и обработкой сигнал проходит по кабелю, по сети или через преобразователи — из‑за разных разъёмов, длин линий и форматов.</p>
         <ul class="list-plain reveal" style="--d:160ms">
           <li><strong>Кабель</strong> — HDMI, SDI, XLR, Ethernet</li>
-          <li><strong>Сеть</strong> — NDI, SRT, RTMP (сигнал «по IP»)</li>
+          <li><strong>Сеть</strong> — NDI, SRT, RTMP (передача по IP)</li>
           <li><strong>Устройства на пути</strong> — конвертер, сплиттер, матрица</li>
         </ul>
+        <div class="note reveal" style="--d:220ms"><strong>Тракт</strong> — упорядоченная последовательность звеньев, по которой сигнал проходит от источника к конечному приёмнику.</div>
       </div>
       {photo("path-setup.jpg", "Кабели и стойка", "Wikimedia Commons")}
-    </section>''')
+    </section>"""
+    )
 
-    # 7 Cables
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide" data-title="Кабели">
       <div class="eyebrow reveal">Путь · кабели</div>
       <h2 class="reveal" style="--d:40ms">Кабели и интерфейсы</h2>
       <p class="sub reveal" style="--d:80ms">Кабель — не «просто провод», а стандарт: разъём + электрический/цифровой протокол + ограничения по длине.</p>
       <div class="grid grid-4">
         <div class="tile reveal-scale" style="--d:120ms"><img src="{img('cable-hdmi-plug.jpg')}" alt="HDMI"/><div class="num">HDMI</div><h3>HDMI</h3><p>Бытовой/компьютерный видео+звук. Короткие линии, чувствителен к качеству кабеля.</p></div>
-        <div class="tile reveal-scale" style="--d:160ms"><img src="{img('bnc.jpg')}" alt="BNC"/><div class="num">SDI</div><h3>SDI (BNC)</h3><p>Проф. видео. Level A / Level B — разные упаковки 3G-SDI. Длиннее HDMI, надёжнее на площадке.</p></div>
-        <div class="tile reveal-scale" style="--d:200ms"><img src="{img('cable-xlr.jpg')}" alt="XLR"/><div class="num">XLR</div><h3>XLR</h3><p>Балансный звук, фантомное питание +48V для конденсаторных микрофонов.</p></div>
-        <div class="tile reveal-scale" style="--d:240ms"><img src="{img('cable-eth.jpg')}" alt="Ethernet"/><div class="num">ETH</div><h3>Ethernet</h3><p>Сеть: NDI, управление PTZ, стрим, Dante. Качество линка = качество эфира.</p></div>
+        <div class="tile reveal-scale" style="--d:160ms"><img src="{img('bnc.jpg')}" alt="BNC"/><div class="num">SDI</div><h3>SDI (BNC)</h3><p>Профессиональное видео. Level A / Level B — разные упаковки 3G-SDI. Длиннее HDMI, надёжнее на площадке.</p></div>
+        <div class="tile reveal-scale" style="--d:200ms"><img src="{img('cable-xlr.jpg')}" alt="XLR"/><div class="num">XLR</div><h3>XLR</h3><p>Балансный звуковой интерфейс для микрофонов и линейных сигналов.</p></div>
+        <div class="tile reveal-scale" style="--d:240ms"><img src="{img('rj45-plug.jpg')}" alt="RJ45"/><div class="num">ETH</div><h3>Ethernet</h3><p>Сеть, управление, стрим и другие средства передачи по IP.</p></div>
       </div>
-      <div class="note reveal" style="--d:300ms"><strong>SDI Level A / Level B:</strong> оба могут нести 1080p50/60 по 3G, но упаковка разная — устройства должны договориться о режиме.</div>
-    </section>''')
+    </section>"""
+    )
 
-    # 8 Transformers map
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Преобразователи">
       <div class="copy">
-        <div class="eyebrow reveal">Путь · преобразователи</div>
-        <h2 class="reveal" style="--d:60ms">Четыре семейства «коробочек»</h2>
-        <p class="sub reveal" style="--d:100ms">На пути сигнала почти всегда стоит что‑то из этого списка. Путать их нельзя — чините разное.</p>
+        <div class="eyebrow reveal">Путь</div>
+        <h2 class="reveal" style="--d:60ms">Преобразователи сигнала</h2>
+        <p class="sub reveal" style="--d:100ms">На пути сигнала часто устанавливают устройства этой группы. «Преобразование» здесь — общее обозначение: речь не только о смене типа интерфейса, но и о разветвлении, согласовании разъёмов и соединении линий.</p>
         <div class="big-list reveal" style="--d:160ms">
           <div class="item"><div class="n">01</div><div><h3>Конверторы</h3><p>Меняют стандарт сигнала (HDMI↔SDI)</p></div></div>
-          <div class="item"><div class="n">02</div><div><h3>Адаптеры</h3><p>Меняют только разъём/форм-фактор</p></div></div>
+          <div class="item"><div class="n">02</div><div><h3>Адаптеры</h3><p>Меняют только разъём / форм-фактор</p></div></div>
           <div class="item"><div class="n">03</div><div><h3>Сплиттеры</h3><p>Раздают один сигнал на N выходов</p></div></div>
-          <div class="item"><div class="n">04</div><div><h3>Соединители</h3><p>«Бочонки», удлинители, пассивные тройники</p></div></div>
+          <div class="item"><div class="n">04</div><div><h3>Соединители</h3><p>«Бочонки», удлинители, пассивные разветвители</p></div></div>
         </div>
       </div>
       {photo("bmd-converters.jpg", "Mini-конвертеры", "Wikimedia Commons · Blackmagic Mini Converters")}
-    </section>''')
+    </section>"""
+    )
 
-    # 9 Converters
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Конверторы">
       <div class="copy">
         <div class="eyebrow reveal">Конверторы</div>
         <h2 class="reveal" style="--d:60ms">Конвертер ≠ адаптер</h2>
-        <p class="sub reveal" style="--d:100ms"><strong>Конвертер</strong> переводит один <em>стандарт сигнала</em> в другой: перепаковывает данные, часто с питанием и чипом.</p>
+        <p class="sub reveal" style="--d:100ms"><strong>Конвертер</strong> переводит один <em>стандарт сигнала</em> в другой: перепаковывает данные, как правило с питанием и специализированным чипом.</p>
         <ul class="list-plain reveal" style="--d:160ms">
           <li><strong>Пример:</strong> HDMI и SDI — разные стандарты → нужен именно конвертер</li>
-          <li>Может делать up/down/cross conversion (разрешение, fps)</li>
-          <li>Часто умеет встраивать/доставать звук (embed/de-embed)</li>
+          <li>Может выполнять up/down/cross conversion (разрешение, частота кадров)</li>
+          <li>Часто умеет встраивать и извлекать звук (embed / de-embed)</li>
         </ul>
-        <div class="note reveal" style="--d:220ms"><strong>Правило:</strong> если разъёмы разные <em>и</em> протоколы разные — это конвертер, не «переходник за 200 ₽».</div>
+        <div class="note reveal" style="--d:220ms"><strong>Правило:</strong> если разъёмы разные <em>и</em> протоколы разные — это конвертер, а не простой переходник.</div>
       </div>
       {photo("bmd-converters.jpg", "HDMI/SDI конвертеры", "Wikimedia Commons")}
-    </section>''')
+    </section>"""
+    )
 
-    # 10 Adapters
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Адаптеры">
       <div class="copy">
         <div class="eyebrow reveal">Адаптеры</div>
         <h2 class="reveal" style="--d:60ms">Только разъём</h2>
-        <p class="sub reveal" style="--d:100ms"><strong>Адаптер</strong> меняет форм-фактор разъёма, не перекодируя сигнал: USB-C→HDMI (иногда с активной электроникой DisplayPort Alt Mode), HDMI-A→HDMI-C и т.п.</p>
+        <p class="sub reveal" style="--d:100ms"><strong>Адаптер</strong> изменяет форм-фактор разъёма, не перекодируя сигнал. Типичный пример — HDMI ↔ DVI.</p>
         <ul class="list-plain reveal" style="--d:160ms">
-          <li>Не превратит HDMI в SDI</li>
-          <li>Не «починит» несовместимый формат 1080i↔1080p</li>
-          <li>Активный USB-C хаб ≠ пассивный кусок металла</li>
+          <li>Не превращает HDMI в SDI</li>
+          <li>Не устраняет несовместимость форматов кадра</li>
+          <li>Активный USB-C‑хаб не следует путать с пассивным переходником</li>
         </ul>
-        <div class="note reveal" style="--d:220ms"><strong>Ошибка новичка:</strong> купить «HDMI→SDI переходник» без чипа — и ждать чуда. Чуда не будет.</div>
+        <div class="note reveal" style="--d:220ms"><strong>Ошибка новичка:</strong> ожидать от адаптера работу конвертера стандартов.</div>
       </div>
-      {photo("connectors-panel.jpg", "Разъёмы и кабели", "Wikimedia Commons")}
-    </section>''')
+      {photo("adapter-hdmi-dvi.jpg", "Адаптер HDMI–DVI", "Wikimedia Commons", contain=True)}
+    </section>"""
+    )
 
-    # 11 Splitters
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Сплиттеры">
       <div class="copy">
         <div class="eyebrow reveal">Сплиттеры</div>
         <h2 class="reveal" style="--d:60ms">1 → N</h2>
-        <p class="sub reveal" style="--d:100ms"><strong>Сплиттер (distribution amplifier)</strong> копирует один вход на несколько одинаковых выходов: микшер + рекордер + превью.</p>
+        <p class="sub reveal" style="--d:100ms"><strong>Сплиттер (distribution amplifier)</strong> формирует несколько копий одного входного сигнала для параллельных потребителей: микшер, рекордер, превью.</p>
         <ul class="list-plain reveal" style="--d:160ms">
-          <li>Активный сплиттер — с питанием и реклокингом</li>
-          <li>Пассивный «тройник» — риск потерять уровень/лок</li>
-          <li>Не путать с матрицей: сплиттер <em>раздаёт</em>, матрица <em>переключает</em></li>
+          <li>Активный сплиттер — с питанием и стабилизацией сигнала</li>
+          <li>Пассивный разветвитель повышает риск потери уровня и срыва приёма</li>
         </ul>
       </div>
-      {photo("sdi-gear.jpg", "Видеокоммутация", "Wikimedia Commons")}
-    </section>''')
+      {photo("hdmi-splitter.jpg", "HDMI splitter", "", contain=True)}
+    </section>"""
+    )
 
-    # 12 Connectors
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Соединители">
       <div class="copy">
         <div class="eyebrow reveal">Соединители</div>
         <h2 class="reveal" style="--d:60ms">Бочонки и удлинение</h2>
-        <p class="sub reveal" style="--d:100ms"><strong>Соединитель («бочонок»)</strong> — механическое стыкование двух кабелей одного типа (BNC–BNC, HDMI coupler). Пассивные сплиттеры рядом по полке, но по роли опаснее.</p>
+        <p class="sub reveal" style="--d:100ms"><strong>Соединитель («бочонок»)</strong> — элемент механического стыкования двух однотипных кабелей (например, BNC–BNC) для удлинения линии или смены пола разъёма.</p>
         <ul class="list-plain reveal" style="--d:160ms">
-          <li>Удлинить линию без нового длинного кабеля</li>
-          <li>Сменить пол разъёма (папа/мама)</li>
-          <li>Каждое пассивное соединение — точка отказа</li>
+          <li>Позволяет нарастить линию без замены всего кабеля</li>
+          <li>Каждое дополнительное соединение увеличивает число потенциальных точек отказа</li>
+          <li><strong>Пассивные разветвители</strong> делят энергию сигнала между несколькими выходами и поэтому менее предпочтительны в эфирном тракте, чем активные устройства распределения</li>
         </ul>
       </div>
-      {photo("bnc.jpg", "BNC-разъём", "Wikimedia Commons")}
-    </section>''')
+      {photo("bnc-barrel.jpg", "BNC barrel", "", contain=True)}
+    </section>"""
+    )
 
-    # 13 Scheme
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide" data-title="Схема HDMI→SDI">
       <div class="eyebrow reveal">Связка</div>
       <h2 class="reveal" style="--d:40ms">Камера HDMI → SDI-сплиттер</h2>
-      <p class="sub reveal" style="--d:80ms">Типовая задача: камера отдаёт HDMI, а тракт площадки — SDI. Нужен конвертер, потом раздача.</p>
+      <p class="sub reveal" style="--d:80ms">Типовая задача: камера отдаёт HDMI, а тракт площадки построен на SDI. Требуется конвертер, затем раздача.</p>
       <div class="scheme reveal" style="--d:140ms">
         <div class="box"><strong>Источник</strong>Камера HDMI</div>
         <div class="arrow">→</div>
@@ -369,213 +416,286 @@ def build() -> None:
         <div class="box"><strong>Потребители</strong>микшер / запись / превью</div>
       </div>
       <div class="grid grid-2" style="margin-top:1rem">
-        <div class="tile reveal-scale" style="--d:200ms"><img src="{img('cam-bmd.jpg')}" alt="камера"/><h3>Почему так</h3><p>Не тащим длинный HDMI по залу. SDI держит дистанцию и разъёмы BNC надёжнее на ногах публики.</p></div>
-        <div class="tile reveal-scale" style="--d:260ms"><img src="{img('bmd-converters.jpg')}" alt="конвертер"/><h3>Где ошибаются</h3><p>Ставят адаптер вместо конвертера; забывают питание конвертера; путают Level A/B на 3G.</p></div>
+        <div class="tile reveal-scale" style="--d:200ms"><img src="{img('cam-bmd.jpg')}" alt="камера"/><h3>Почему так</h3><p>Длинные HDMI-линии на площадке менее стабильны. SDI обеспечивает большую дальность и удобные разъёмы BNC.</p></div>
+        <div class="tile reveal-scale" style="--d:260ms"><img src="{img('bmd-converters.jpg')}" alt="конвертер"/><h3>Где ошибаются</h3><p>Ставят адаптер вместо конвертера; забывают питание конвертера; путают параметры сигнала.</p></div>
       </div>
-    </section>''')
+    </section>"""
+    )
 
-    # 14 Processing overview
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Обработка">
       <div class="copy">
         <div class="eyebrow reveal">Обработка</div>
         <h2 class="reveal" style="--d:60ms">Микшеры, скейлеры, матрицы</h2>
-        <p class="sub reveal" style="--d:100ms">Здесь из входов собирают программу: переключают, масштабируют, маршрутизируют.</p>
+        <p class="sub reveal" style="--d:100ms">На этом этапе из входных сигналов формируют программу: переключают, масштабируют и маршрутизируют.</p>
         <div class="big-list reveal" style="--d:160ms">
-          <div class="item"><div class="n">01</div><div><h3>Микшер</h3><p>Выбирает, что в PGM прямо сейчас</p></div></div>
-          <div class="item"><div class="n">02</div><div><h3>Скейлер</h3><p>Подгоняет разрешение/геометрию под экран</p></div></div>
-          <div class="item"><div class="n">03</div><div><h3>Матрица</h3><p>Любой вход → любой выход (M×N)</p></div></div>
+          <div class="item"><div class="n">01</div><div><h3>Микшер</h3><p>Определяет, что сейчас в программе</p></div></div>
+          <div class="item"><div class="n">02</div><div><h3>Скейлер</h3><p>Согласует формат кадра с целевым экраном</p></div></div>
+          <div class="item"><div class="n">03</div><div><h3>Матрица</h3><p>Назначает маршруты «любой вход → любой выход»</p></div></div>
         </div>
       </div>
       {photo("atem-panel.jpg", "Панель микшера", "Wikimedia Commons · ATEM panel")}
-    </section>''')
+    </section>"""
+    )
 
-    # 15 Mixers Roland V-60HD
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Микшеры">
       <div class="copy">
         <div class="eyebrow reveal">Микшеры</div>
         <h2 class="reveal" style="--d:60ms">Roland V-60HD</h2>
-        <p class="sub reveal" style="--d:100ms"><strong>Видеомикшер (switcher)</strong> — устройство/софт, которое в реальном времени выбирает PGM (программа) и PVW (превью), делает переходы, PinP, ключи.</p>
+        <p class="sub reveal" style="--d:100ms"><strong>Видеомикшер (switcher)</strong> — устройство или программа, которое в реальном времени выбирает PGM и PVW, выполняет переходы, PinP и ключи.</p>
         <ul class="list-plain reveal" style="--d:160ms">
           <li>4× SDI + 2× HDMI (со скейлом на HDMI)</li>
           <li>Выходы PGM / AUX / Multi-View</li>
           <li>Встроенный аудимикшер, XLR, автомикс</li>
         </ul>
         <div class="tag-row reveal" style="--d:220ms">
-          <span class="tag on">PGM</span><span class="tag on">PVW</span><span class="tag on">AUX</span><span class="tag">T-bar</span>
+          <span class="tag on">PGM</span><span class="tag on">PVW</span><span class="tag on">AUX</span>
         </div>
       </div>
       {photo("roland-v60hd-main.jpg", "Roland V-60HD", "Roland Pro A/V · V-60HD", contain=True)}
-    </section>''')
+    </section>"""
+    )
 
-    # 16 Scalers
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Скейлеры">
       <div class="copy">
         <div class="eyebrow reveal">Скейлеры</div>
-        <h2 class="reveal" style="--d:60ms">Подгон под экран</h2>
-        <p class="sub reveal" style="--d:100ms"><strong>Скейлер</strong> меняет геометрию кадра: разрешение, соотношение сторон, ориентацию — без «тупого растягивания».</p>
+        <h2 class="reveal" style="--d:60ms">Согласование формата</h2>
+        <p class="sub reveal" style="--d:100ms"><strong>Скейлер</strong> приводит входной кадр к требуемому формату отображения: разрешению, соотношению сторон и ориентации — без искажения пропорций.</p>
         <div class="panel reveal" style="--d:160ms">
           <h3>Кейс</h3>
           <ul class="list-plain">
             <li><strong>Вход:</strong> Full HD 1920×1080</li>
             <li><strong>Экран:</strong> 768×1280 (вертикальный)</li>
-            <li><strong>Решение:</strong> ресайз и fit по высоте без чёрных полос / с осмысленным crop</li>
-            <li><strong>Ошибка:</strong> «растянуть» в плеере — пропорции поедут</li>
+            <li><strong>Решение:</strong> масштабирование и подгонка (fit / crop)</li>
+            <li><strong>Ошибка:</strong> принудительное растягивание — нарушение пропорций</li>
           </ul>
         </div>
       </div>
-      {photo("scaler-box.jpg", "Устройство обработки видео", "Wikimedia Commons")}
-    </section>''')
+      {photo("video-scaler.jpg", "Video scaler", "", contain=True)}
+    </section>"""
+    )
 
-    # 17 Matrices
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Матрицы">
       <div class="copy">
         <div class="eyebrow reveal">Матрицы / видеохабы</div>
         <h2 class="reveal" style="--d:60ms">Несколько × несколько</h2>
-        <p class="sub reveal" style="--d:100ms"><strong>Матрица (router / Videohub)</strong> — коммутатор M входов на N выходов. Любой источник можно послать на любой выход.</p>
+        <p class="sub reveal" style="--d:100ms"><strong>Матрица (router / Videohub)</strong> — коммутатор M входов на N выходов с независимым назначением маршрутов.</p>
         <ul class="list-plain reveal" style="--d:160ms">
-          <li>Сплиттер: один вход → все выходы одинаковые</li>
-          <li>Матрица: входы и выходы независимо назначаются</li>
-          <li>Пресеты сцен = меньше перетыкания кабелей в эфире</li>
+          <li>Сплиттер: один вход → одинаковые копии на все выходы</li>
+          <li>Матрица: входы и выходы назначаются независимо</li>
+          <li>Пресеты снижают необходимость перекоммутации в эфире</li>
         </ul>
       </div>
-      {photo("bmd-videohub.jpg", "Blackmagic Videohub", "Wikimedia Commons · Videohub")}
-    </section>''')
+      {dual_photo("bmd-videohub.jpg", "Videohub спереди", "videohub-rear.jpg", "Videohub сзади", "Спереди — управление; сзади — разъёмы")}
+    </section>"""
+    )
 
-    # 18 Capture cards
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide" data-title="Карты захвата">
       <div class="eyebrow reveal">Карты ввода</div>
       <h2 class="reveal" style="--d:40ms">USB и PCIe</h2>
-      <p class="sub reveal" style="--d:80ms"><strong>Карта захвата (capture)</strong> — мост SDI/HDMI → компьютер. Без неё «провода» в vMix не попадут.</p>
+      <p class="sub reveal" style="--d:80ms"><strong>Карта захвата (capture)</strong> принимает SDI/HDMI и передаёт кадры в компьютер / микшерное ПО.</p>
       <div class="grid grid-2">
         <div class="tile reveal-scale" style="--d:120ms">
-          <img src="{img('capture-usb2.jpg')}" alt="USB capture"/>
+          <div class="cap">USB capture — внешний бокс</div>
+          <img class="fit" src="{img('capture-usb2.jpg')}" alt="USB capture"/>
           <div class="num">USB</div>
-          <h3>USB capture</h3>
-          <p>Удобно, портативно. USB 3.x ≈ 5–10 Гбит/с на контроллер; делите полосу с дисками и другими устройствами. Latency и стабильность зависят от чипсета/драйвера.</p>
+          <h3>Внешняя карта / бокс USB</h3>
+          <p>Подключается к порту USB. Удобна для ноутбука. Полоса делится с другими устройствами; стабильность зависит от чипа и драйвера.</p>
         </div>
         <div class="tile reveal-scale" style="--d:180ms">
-          <img src="{img('capture-datapath.jpg')}" alt="PCIe capture"/>
+          <div class="cap">PCIe capture — плата внутрь ПК</div>
+          <img class="fit" src="{img('capture-datapath.jpg')}" alt="PCIe capture"/>
           <div class="num">PCIe</div>
-          <h3>PCIe (DeckLink и др.)</h3>
-          <p>Слоты x4/x8/x16 — отдельные линии PCI Express. Выше запас по полосе, ниже сюрпризы на длинном эфире, несколько входов на одной карте.</p>
+          <h3>Внутренняя плата PCIe</h3>
+          <p>Устанавливается в слот системной платы (линии x4/x8/x16). Выше запас по полосе, удобнее многоканальные входы.</p>
         </div>
       </div>
-      <div class="note reveal" style="--d:240ms"><strong>Линии PCIe:</strong> карта x4 в слоте x4 получает свою полосу; «электрически x16, механически x4» читайте в мануале платы.</div>
-    </section>''')
+      <div class="note reveal" style="--d:240ms"><strong>Как отличить:</strong> USB — отдельный корпус к порту компьютера; PCIe — плата с контактной «гребёнкой» внутрь корпуса ПК.</div>
+    </section>"""
+    )
 
-    # 19 Output vs GPU
-    slides.append(f'''
-    <section class="slide split" data-title="Вывод и GPU">
-      <div class="copy">
-        <div class="eyebrow reveal">Вывод · видеокарта</div>
-        <h2 class="reveal" style="--d:60ms">Захват → обработка → вывод</h2>
-        <p class="sub reveal" style="--d:100ms"><strong>Карта вывода</strong> отдаёт программу обратно в SDI/HDMI. <strong>Видеокарта (GPU)</strong> — ускоритель композиции и кодирования (NVENC), плюс мониторы.</p>
-        <ul class="list-plain reveal" style="--d:160ms">
-          <li>Capture (SDI/HDMI) → рабочая станция</li>
-          <li>GPU: слои, NDI, энкод стрима, несколько дисплеев</li>
-          <li class=""><strong>HDMI в ноутбуке/ПК не работает на вход</strong></li>
-        </ul>
-        <div class="note reveal" style="--d:220ms"><strong>Вывод ≠ GPU:</strong> мониторный HDMI с видеокарты — не профессиональный PGM-выход в тракт. Для эфирного SDI нужна карта вывода / конвертер.</div>
+    slides.append(
+        f"""
+    <section class="slide" data-title="Вывод">
+      <div class="eyebrow reveal">Вывод программы</div>
+      <h2 class="reveal" style="--d:40ms">Карты и боксы вывода</h2>
+      <p class="sub reveal" style="--d:80ms">После обработки программу возвращают в тракт устройствами вывода — это не мониторный выход игровой видеокарты.</p>
+      <div class="grid grid-2">
+        <div class="tile reveal-scale" style="--d:120ms">
+          <div class="cap">Внешний бокс вывода</div>
+          <img class="fit" src="{img('bmd-monitor-out.jpg')}" alt="UltraStudio Monitor"/>
+          <h3>Blackmagic UltraStudio Monitor (пример)</h3>
+          <p>Внешнее устройство: принимает программу со станции и отдаёт её в SDI/HDMI эфирного тракта или на контрольный монитор.</p>
+        </div>
+        <div class="tile reveal-scale" style="--d:180ms">
+          <div class="cap">Внутренняя PCIe-плата вывода</div>
+          <img class="fit" src="{img('pcie-output-card.jpg')}" alt="PCIe SDI HDMI out"/>
+          <h3>PCIe SDI + HDMI playback</h3>
+          <p>Плата в слот ПК с выходами SDI и HDMI. Типовая роль — playback / program out в профессиональный тракт.</p>
+        </div>
       </div>
-      {photo("gpu.jpg", "Видеокарта", "Wikimedia Commons · NVIDIA GeForce")}
-    </section>''')
+      <div class="note reveal" style="--d:240ms"><strong>Связка:</strong> захват → обработка на станции → вывод. HDMI ноутбука/ПК — всегда только выход и не заменяет вход захвата.</div>
+    </section>"""
+    )
 
-    # 20 Streamers recorders
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Стрим / запись">
       <div class="copy">
         <div class="eyebrow reveal">Вывод</div>
         <h2 class="reveal" style="--d:60ms">Стриммеры и рекордеры</h2>
-        <p class="sub reveal" style="--d:100ms"><strong>Железный стриммер/рекордер</strong> пишет и/или отдаёт эфир отдельно от рабочей станции — меньше шансов потерять архив из‑за зависания ОС.</p>
+        <p class="sub reveal" style="--d:100ms"><strong>Железный стриммер/рекордер</strong> кодирует и/или записывает программу отдельно от рабочей станции — снижая риск потери архива при сбое ОС.</p>
         <ul class="list-plain reveal" style="--d:160ms">
-          <li>Рекордер (HyperDeck и др.) — файл на SSD, ISO/Program</li>
+          <li>Рекордер — файл на SSD (Program / ISO)</li>
           <li>Стриммер — RTMP/SRT на платформу</li>
-          <li>Почему не «только на комп»: синий экран = нет ни эфира, ни файла</li>
+          <li>Запись только на тот же ПК уязвима к зависанию станции</li>
         </ul>
       </div>
       {photo("bmd-hyperdeck.jpg", "HyperDeck рекордер", "Wikimedia Commons · HyperDeck Studio")}
-    </section>''')
+    </section>"""
+    )
 
-    # 21 Audio
-    slides.append(f'''
+    slides.append(
+        f"""
     <section class="slide split" data-title="Звук">
       <div class="copy">
         <div class="eyebrow reveal">Звук</div>
         <h2 class="reveal" style="--d:60ms">Карты и синхрон</h2>
-        <p class="sub reveal" style="--d:100ms"><strong>Звуковая карта / аудиоинтерфейс</strong> — качественный ввод-вывод и контроль уровней. Нужна, когда звук идёт отдельным трактом и его надо свести с видео.</p>
+        <p class="sub reveal" style="--d:100ms"><strong>Звуковая карта / аудиоинтерфейс</strong> обеспечивает качественный ввод-вывод и контроль уровней, когда звук идёт отдельным трактом.</p>
         <ul class="list-plain reveal" style="--d:160ms">
-          <li><strong>«Звук отстаёт»</strong> — разные пути: видео по NDI, звук по XLR/USB</li>
-          <li>Лечится <strong>delay / lip-sync</strong> в микшере или софте</li>
-          <li>Сверяйте семплрейт 48 kHz с видеорядом</li>
+          <li><strong>«Звук отстаёт»</strong> — разные пути: видео по сети, звук по XLR/USB</li>
+          <li>Коррекция — <strong>delay / lip-sync</strong> в микшере или ПО</li>
+          <li>Согласование семплрейта (обычно 48 kHz) с видеорядом</li>
         </ul>
       </div>
       {photo("audio-iface.jpg", "Аудиоинтерфейсы", "Wikimedia Commons · Focusrite")}
-    </section>''')
+    </section>"""
+    )
 
-    # 22 Practice intro
-    slides.append(f'''
-    <section class="slide split" data-title="Практика">
-      <div class="copy">
-        <div class="eyebrow reveal">Мини-практика · 10 мин</div>
-        <h2 class="reveal" style="--d:60ms">Четыре схемы</h2>
-        <p class="sub reveal" style="--d:100ms">На каждом слайде — схема. Задача: подписать стрелки типом соединения (SDI / HDMI / NDI) и найти <strong>одну ошибку</strong>.</p>
-        <div class="note reveal" style="--d:180ms"><strong>Критерий:</strong> не «угадать бренд», а объяснить, почему такой интерфейс и где разрыв логики.</div>
-      </div>
-      {photo("roland-v60hd.jpg", "Roland V-60HD", "Roland Pro A/V")}
-    </section>''')
+    slides.append(
+        """
+    <section class="slide solo" data-title="Практика">
+      <div class="eyebrow reveal">Мини-практика · 10 мин</div>
+      <h2 class="reveal" style="--d:60ms">Четыре схемы</h2>
+      <p class="sub reveal" style="--d:100ms">На каждом следующем слайде — схема из узлов занятия. Задача: определить типы соединений (SDI / HDMI / NDI) на связях и найти <strong>ровно одну ошибку</strong>.</p>
+      <p class="sub reveal" style="--d:160ms">Повторное нажатие «далее» откроет правильные подписи и описание ошибки.</p>
+    </section>"""
+    )
 
-    # 23-26 practice schemes
+
+    def blank_edge() -> str:
+        return '<div class="flow-edge"><span>→</span><span class="wire">?</span></div>'
+
     practices = [
-        ("Схема A", "Камера SDI → ноутбук по HDMI без карты захвата",
-         "Камера SDI → ? → Ноутбук → Стрим",
-         "Ошибка: HDMI ноутбука не принимает вход. Нужна capture-карта (USB/PCIe) или NDI-энкодер.",
-         "cam-ptz.jpg"),
-        ("Схема B", "Камера HDMI → длинный HDMI 40 м → микшер",
-         "Камера HDMI → HDMI 40 м → V-60HD",
-         "Ошибка: длинный HDMI нестабилен. Конвертер HDMI→SDI + SDI-кабель (или оптика/NDI).",
-         "cable-hdmi.jpg"),
-        ("Схема C", "Один источник на микшер и рекордер через пассивный тройник",
-         "Камера → пассивный BNC-тройник → микшер + рекордер",
-         "Ошибка: пассивный сплит. Нужен активный SDI DA / выход матрицы.",
-         "bmd-hyperdeck.jpg"),
-        ("Схема D", "Вертикальный экран без скейлера",
-         "ПК 1920×1080 → микшер → экран 768×1280 «stretch»",
-         "Ошибка: растягивание. Нужен скейлер (fit/crop), не distort.",
-         "laptop.jpg"),
+        (
+            "Схема A",
+            "Камера SDI должна попасть в ноутбук и далее в стрим. Подпишите соединения и найдите одну ошибку.",
+            "".join([
+                '<div class="flow">',
+                node("источник", "Камера SDI"),
+                blank_edge(),
+                node("путь", "Кабель"),
+                blank_edge(),
+                node("захват", "Ноутбук"),
+                blank_edge(),
+                node("вывод", "Стриммер"),
+                "</div>",
+            ]),
+            "Правильные типы: SDI (или NDI после энкодера) до станции; RTMP/SRT до платформы. На ошибочной версии между камерой и ноутбуком указан HDMI.",
+            "HDMI нельзя использовать как вход ноутбука/ПК. Нужна карта захвата или сетевой протокол.",
+        ),
+        (
+            "Схема B",
+            "Камера HDMI, микшер V-60HD и рекордер на длинной дистанции. Подпишите соединения и найдите одну ошибку.",
+            "".join([
+                '<div class="flow">',
+                node("источник", "Камера HDMI"),
+                blank_edge(),
+                node("путь", "Линия 40 м"),
+                blank_edge(),
+                node("обработка", "V-60HD"),
+                blank_edge(),
+                node("запись", "Рекордер"),
+                "</div>",
+            ]),
+            "Правильные типы: HDMI→конвертер→SDI до микшера; SDI до рекордера.",
+            "Длинный HDMI без конвертации в SDI (или без сетевого тракта).",
+        ),
+        (
+            "Схема C",
+            "Один SDI-источник нужен и микшеру, и рекордеру. Подпишите соединения и найдите одну ошибку.",
+            "".join([
+                '<div class="flow">',
+                node("источник", "Камера SDI"),
+                blank_edge(),
+                node("путь", "Разветвитель"),
+                blank_edge(),
+                node("обработка", "Микшер"),
+                blank_edge(),
+                node("запись", "Рекордер"),
+                "</div>",
+            ]),
+            "Правильные типы: SDI до активного сплиттера; SDI до микшера и SDI до рекордера (либо матрица).",
+            "Пассивный тройник вместо активного сплиттера или выходов матрицы.",
+        ),
+        (
+            "Схема D",
+            "ПК 1920×1080 выводят на экран 768×1280. Подпишите соединения и найдите одну ошибку.",
+            "".join([
+                '<div class="flow">',
+                node("источник", "ПК 1080p"),
+                blank_edge(),
+                node("обработка", "Микшер"),
+                blank_edge(),
+                node("формат", "Обработка кадра"),
+                blank_edge(),
+                node("экран", "768×1280"),
+                "</div>",
+            ]),
+            "Правильные типы: HDMI до микшера; далее через скейлер (не stretch) на экран.",
+            "Принудительное растягивание без скейлера — искажение пропорций.",
+        ),
     ]
-    for title, lead, scheme, err, pic in practices:
-        slides.append(f'''
-    <section class="slide split" data-title="{title}">
-      <div class="copy">
-        <div class="eyebrow reveal">Практика</div>
-        <h2 class="reveal" style="--d:60ms">{title}</h2>
-        <p class="sub reveal" style="--d:100ms">{lead}</p>
-        <div class="panel reveal" style="--d:160ms"><h3>Цепочка</h3><p style="color:var(--muted);font-size:1rem;line-height:1.45">{scheme}</p></div>
-        <div class="note reveal" style="--d:220ms"><strong>Ошибка:</strong> {err}</div>
-      </div>
-      {photo(pic, title, "")}
-    </section>''')
 
-    # 27 Summary
-    slides.append(f'''
-    <section class="slide split" data-title="Итог">
-      <div class="copy">
-        <div class="eyebrow reveal">Итог</div>
-        <h2 class="reveal" style="--d:60ms">Думать трактом</h2>
-        <p class="sub reveal" style="--d:100ms">Источник → путь → обработка → вывод. Оборудование выбираем под задачу и соединение.</p>
-        <ul class="list-plain reveal" style="--d:160ms">
-          <li>Конвертер ≠ адаптер; сплиттер ≠ матрица</li>
-          <li>HDMI ПК — не вход; длинные линии — зона SDI/сети</li>
-          <li>Железная запись страхует софт; звук синхронизируют delay</li>
-        </ul>
+
+    for title, lead, diagram, wires, err in practices:
+        slides.append(
+            f"""
+    <section class="slide" data-title="{title}" data-fragments="1">
+      <div class="eyebrow">Практика</div>
+      <h2>{title}</h2>
+      <p class="sub">{lead}</p>
+      {diagram}
+      <div class="answer-box fragment">
+        <h3>Ответ</h3>
+        <p style="color:var(--muted);margin-bottom:.45rem">{wires}</p>
+        <p style="color:var(--text)"><strong>Ошибка:</strong> {err}</p>
       </div>
-      {photo("bmd-atem.jpg", "Эфирный комплект", "Wikimedia Commons")}
-    </section>''')
+    </section>"""
+        )
+
+    slides.append(
+        """
+    <section class="slide solo" data-title="Итог">
+      <div class="eyebrow reveal">Итог</div>
+      <h2 class="reveal" style="--d:60ms">Сначала задача, потом тип соединения, потом железо — а не наоборот.</h2>
+      <p class="sub reveal" style="--d:120ms">Источник → путь → обработка → вывод. Оборудование выбираем под задачу.</p>
+      <ul class="list-plain reveal" style="--d:180ms">
+        <li>Конвертер ≠ адаптер; сплиттер ≠ матрица</li>
+        <li>HDMI персонального компьютера — всегда только выход</li>
+      </ul>
+      <div class="note reveal" style="--d:260ms"><strong>Диагностика:</strong> исследование неисправности ведут от источника к конечному приёмнику; устранение начинают на участке сразу после последнего звена, где сигнал ещё присутствовал в штатном виде.</div>
+    </section>"""
+    )
 
     html = f"""<!DOCTYPE html>
 <html lang="ru">
