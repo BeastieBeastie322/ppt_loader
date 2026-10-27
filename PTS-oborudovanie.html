@@ -490,51 +490,63 @@ h3{font-size:1rem;margin-bottom:.3rem}
     </section>
     <section class="slide solo" data-title="Практика">
       <div class="eyebrow reveal">Мини-практика · 10 мин</div>
-      <h2 class="reveal" style="--d:60ms">Четыре схемы</h2>
-      <p class="sub reveal" style="--d:100ms">На каждом следующем слайде — схема из узлов занятия. Задача: определить типы соединений (SDI / HDMI / NDI) на связях и найти <strong>ровно одну ошибку</strong>.</p>
+      <h2 class="reveal" style="--d:60ms">Четыре задачи</h2>
+      <p class="sub reveal" style="--d:100ms">На каждом слайде — практическая задача. Назовите оборудование из занятия, которым её решить, и кратко опишите цепочку.</p>
     </section>
-    <section class="slide" data-title="Схема A" data-fragments="1">
+    <section class="slide" data-title="Задача 1" data-fragments="1">
       <div class="eyebrow">Практика</div>
-      <h2>Схема A</h2>
-      <p class="sub">Камера SDI должна попасть в ноутбук и далее в стрим. Подпишите соединения и найдите одну ошибку.</p>
-      <div class="flow"><div class="flow-node"><span class="role">источник</span><span class="name">Камера SDI</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">путь</span><span class="name">Кабель</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">захват</span><span class="name">Ноутбук</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">вывод</span><span class="name">Стриммер</span></div></div>
+      <h2>Задача 1</h2>
+      <p class="sub">Камера отдаёт только HDMI. Нужно подать сигнал на микшер с входами SDI и одновременно на рекордер с входом HDMI.</p>
+      <div class="panel reveal" style="--d:80ms">
+        <h3>Вопрос</h3>
+        <p style="color:var(--muted);font-size:1.05rem;line-height:1.45">Каким оборудованием из занятия это решить?</p>
+      </div>
       <div class="answer-box fragment">
-        <h3>Ответ</h3>
-        <p style="color:var(--muted);margin-bottom:.45rem">Правильные типы: SDI (или NDI после энкодера) до станции; RTMP/SRT до платформы. На ошибочной версии между камерой и ноутбуком указан HDMI.</p>
-        <p style="color:var(--text)"><strong>Ошибка:</strong> HDMI нельзя использовать как вход ноутбука/ПК. Нужна карта захвата или сетевой протокол.</p>
+        <h3>Решение</h3>
+        <p style="color:var(--text);margin-bottom:.45rem"><strong>Оборудование:</strong> HDMI-сплиттер + конвертер HDMI→SDI</p>
+        <p style="color:var(--muted)">Камера → HDMI-сплиттер: одна копия на рекордер (HDMI), вторая → конвертер HDMI→SDI → микшер (SDI). Адаптер здесь не поможет: стандарты разные.</p>
       </div>
     </section>
-    <section class="slide" data-title="Схема B" data-fragments="1">
+    <section class="slide" data-title="Задача 2" data-fragments="1">
       <div class="eyebrow">Практика</div>
-      <h2>Схема B</h2>
-      <p class="sub">Камера HDMI, микшер V-60HD и рекордер на длинной дистанции. Подпишите соединения и найдите одну ошибку.</p>
-      <div class="flow"><div class="flow-node"><span class="role">источник</span><span class="name">Камера HDMI</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">путь</span><span class="name">Линия 40 м</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">обработка</span><span class="name">V-60HD</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">запись</span><span class="name">Рекордер</span></div></div>
+      <h2>Задача 2</h2>
+      <p class="sub">Ноутбук со слайдами нужно вывести в железный микшер, у которого свободны только SDI-входы.</p>
+      <div class="panel reveal" style="--d:80ms">
+        <h3>Вопрос</h3>
+        <p style="color:var(--muted);font-size:1.05rem;line-height:1.45">Каким оборудованием из занятия это решить?</p>
+      </div>
       <div class="answer-box fragment">
-        <h3>Ответ</h3>
-        <p style="color:var(--muted);margin-bottom:.45rem">Правильные типы: HDMI→конвертер→SDI до микшера; SDI до рекордера.</p>
-        <p style="color:var(--text)"><strong>Ошибка:</strong> Длинный HDMI без конвертации в SDI (или без сетевого тракта).</p>
+        <h3>Решение</h3>
+        <p style="color:var(--text);margin-bottom:.45rem"><strong>Оборудование:</strong> Конвертер HDMI→SDI (кабель HDMI с ноутбука)</p>
+        <p style="color:var(--muted)">Ноутбук (выход HDMI) → конвертер HDMI→SDI → микшер. HDMI ноутбука — всегда выход; вход в ПК для этой задачи не нужен.</p>
       </div>
     </section>
-    <section class="slide" data-title="Схема C" data-fragments="1">
+    <section class="slide" data-title="Задача 3" data-fragments="1">
       <div class="eyebrow">Практика</div>
-      <h2>Схема C</h2>
-      <p class="sub">Один SDI-источник нужен и микшеру, и рекордеру. Подпишите соединения и найдите одну ошибку.</p>
-      <div class="flow"><div class="flow-node"><span class="role">источник</span><span class="name">Камера SDI</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">путь</span><span class="name">Разветвитель</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">обработка</span><span class="name">Микшер</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">запись</span><span class="name">Рекордер</span></div></div>
+      <h2>Задача 3</h2>
+      <p class="sub">Камера с выходом SDI должна попасть в vMix на рабочей станции для стрима.</p>
+      <div class="panel reveal" style="--d:80ms">
+        <h3>Вопрос</h3>
+        <p style="color:var(--muted);font-size:1.05rem;line-height:1.45">Каким оборудованием из занятия это решить?</p>
+      </div>
       <div class="answer-box fragment">
-        <h3>Ответ</h3>
-        <p style="color:var(--muted);margin-bottom:.45rem">Правильные типы: SDI до активного сплиттера; SDI до микшера и SDI до рекордера (либо матрица).</p>
-        <p style="color:var(--text)"><strong>Ошибка:</strong> Пассивный тройник вместо активного сплиттера или выходов матрицы.</p>
+        <h3>Решение</h3>
+        <p style="color:var(--text);margin-bottom:.45rem"><strong>Оборудование:</strong> Карта захвата SDI (USB или PCIe)</p>
+        <p style="color:var(--muted)">Камера SDI → карта захвата → рабочая станция (vMix) → стрим. Без capture HDMI ПК сигнал не примет; видеокарта эту роль не выполняет.</p>
       </div>
     </section>
-    <section class="slide" data-title="Схема D" data-fragments="1">
+    <section class="slide" data-title="Задача 4" data-fragments="1">
       <div class="eyebrow">Практика</div>
-      <h2>Схема D</h2>
-      <p class="sub">ПК 1920×1080 выводят на экран 768×1280. Подпишите соединения и найдите одну ошибку.</p>
-      <div class="flow"><div class="flow-node"><span class="role">источник</span><span class="name">ПК 1080p</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">обработка</span><span class="name">Микшер</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">формат</span><span class="name">Обработка кадра</span></div><div class="flow-edge"><span>→</span><span class="wire">?</span></div><div class="flow-node"><span class="role">экран</span><span class="name">768×1280</span></div></div>
+      <h2>Задача 4</h2>
+      <p class="sub">Один SDI-сигнал с камеры нужно одновременно отдать на микшер и на рекордер (оба принимают SDI).</p>
+      <div class="panel reveal" style="--d:80ms">
+        <h3>Вопрос</h3>
+        <p style="color:var(--muted);font-size:1.05rem;line-height:1.45">Каким оборудованием из занятия это решить?</p>
+      </div>
       <div class="answer-box fragment">
-        <h3>Ответ</h3>
-        <p style="color:var(--muted);margin-bottom:.45rem">Правильные типы: HDMI до микшера; далее через скейлер (не stretch) на экран.</p>
-        <p style="color:var(--text)"><strong>Ошибка:</strong> Принудительное растягивание без скейлера — искажение пропорций.</p>
+        <h3>Решение</h3>
+        <p style="color:var(--text);margin-bottom:.45rem"><strong>Оборудование:</strong> Активный SDI-сплиттер (или матрица)</p>
+        <p style="color:var(--muted)">Камера SDI → активный сплиттер → микшер и рекордер. Пассивный «тройник» нежелателен; матрица уместна, если маршрутов несколько и они меняются.</p>
       </div>
     </section>
     <section class="slide solo" data-title="Итог">
