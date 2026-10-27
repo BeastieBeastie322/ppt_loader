@@ -549,6 +549,25 @@ def build() -> None:
 
     slides.append(
         f"""
+    <section class="slide split" data-title="Видеокарты">
+      <div class="copy">
+        <div class="eyebrow reveal">Рабочая станция</div>
+        <h2 class="reveal" style="--d:60ms">Видеокарты (GPU)</h2>
+        <p class="sub reveal" style="--d:100ms"><strong>Видеокарта</strong> на эфирной станции — не «для игр», а ускоритель композиции, кодирования стрима и вывода на мониторы оператора. Её не следует путать с картой захвата или платой профессионального вывода в тракт.</p>
+        <ul class="list-plain reveal" style="--d:160ms">
+          <li><strong>Композиция:</strong> слои, переходы, ключи, NDI, превью в микшерном ПО</li>
+          <li><strong>Кодирование:</strong> аппаратный энкодер (например NVENC) снижает нагрузку на CPU при стриме</li>
+          <li><strong>Мониторинг:</strong> несколько выходов на экраны инженера и режиссёра</li>
+          <li><strong>Запас:</strong> чем больше входов и эффектов, тем выше требования к GPU и памяти</li>
+        </ul>
+        <div class="note reveal" style="--d:220ms"><strong>Зачем нужна:</strong> без достаточного GPU станция «плывёт» по кадрам при сложной программе. При этом мониторный HDMI с видеокарты не заменяет SDI/HDMI‑вывод через карту playback в эфирный тракт.</div>
+      </div>
+      {photo("gpu.jpg", "Видеокарта", "Wikimedia Commons · NVIDIA GeForce")}
+    </section>"""
+    )
+
+    slides.append(
+        f"""
     <section class="slide split" data-title="Стрим / запись">
       <div class="copy">
         <div class="eyebrow reveal">Вывод</div>
