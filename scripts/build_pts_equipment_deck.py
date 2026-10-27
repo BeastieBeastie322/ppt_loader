@@ -562,7 +562,7 @@ def build() -> None:
         </ul>
         <div class="note reveal" style="--d:220ms"><strong>Зачем нужна:</strong> без достаточного GPU станция «плывёт» по кадрам при сложной программе. При этом мониторный HDMI с видеокарты не заменяет SDI/HDMI‑вывод через карту playback в эфирный тракт.</div>
       </div>
-      {photo("gpu.jpg", "Видеокарта", "Wikimedia Commons · NVIDIA GeForce")}
+      {photo("rtx-5090.jpg", "GeForce RTX 5090", "Wikimedia Commons · Palit GeForce RTX 5090", contain=True)}
     </section>"""
     )
 
@@ -606,7 +606,6 @@ def build() -> None:
       <div class="eyebrow reveal">Мини-практика · 10 мин</div>
       <h2 class="reveal" style="--d:60ms">Четыре схемы</h2>
       <p class="sub reveal" style="--d:100ms">На каждом следующем слайде — схема из узлов занятия. Задача: определить типы соединений (SDI / HDMI / NDI) на связях и найти <strong>ровно одну ошибку</strong>.</p>
-      <p class="sub reveal" style="--d:160ms">Повторное нажатие «далее» откроет правильные подписи и описание ошибки.</p>
     </section>"""
     )
 
