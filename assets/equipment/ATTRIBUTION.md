@@ -17,3 +17,5 @@
 - user-capture-pcie.jpg — PCIe SDI capture
 - user-ultrastudio-monitor.jpg — UltraStudio Monitor 3G
 - user-pcie-sdi-hdmi.jpg — PCIe SDI+HDMI
+- cable-rj45.jpg — RJ45 (из предоставленного фото, выровнено в ландшафт на белом)
+- cable-bnc.jpg — BNC на белом (обработка исходного bnc.jpg)

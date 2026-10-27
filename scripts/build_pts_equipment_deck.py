@@ -95,7 +95,7 @@ h3{font-size:1rem;margin-bottom:.3rem}
 .tile{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1rem 1.05rem;backdrop-filter:blur(8px);min-height:0}
 .tile .num{font-family:Unbounded,sans-serif;color:var(--accent);font-size:.72rem;letter-spacing:.08em;margin-bottom:.4rem}
 .tile p,.list-plain li{color:var(--muted);font-size:.92rem;line-height:1.4}
-.tile img{width:100%;height:110px;object-fit:cover;border-radius:10px;margin-bottom:.65rem;border:1px solid var(--line)}
+.tile img{width:100%;height:120px;object-fit:cover;border-radius:10px;margin-bottom:.65rem;border:1px solid var(--line);background:#fff}
 .tile img.sq{aspect-ratio:1/1;width:min(100%,180px);height:auto;max-height:180px;object-fit:contain;
   background:#12081c;display:block;margin:0 auto .65rem}
 .big-list{display:flex;flex-direction:column;gap:.55rem}
@@ -326,9 +326,9 @@ def build() -> None:
       <p class="sub reveal" style="--d:80ms">Кабель — не «просто провод», а стандарт: разъём + электрический/цифровой протокол + ограничения по длине.</p>
       <div class="grid grid-4">
         <div class="tile reveal-scale" style="--d:120ms"><img src="{img('cable-hdmi-plug.jpg')}" alt="HDMI"/><div class="num">HDMI</div><h3>HDMI</h3><p>Бытовой/компьютерный видео+звук. Короткие линии, чувствителен к качеству кабеля.</p></div>
-        <div class="tile reveal-scale" style="--d:160ms"><img src="{img('bnc.jpg')}" alt="BNC"/><div class="num">SDI</div><h3>SDI (BNC)</h3><p>Профессиональное видео. Level A / Level B — разные упаковки 3G-SDI. Длиннее HDMI, надёжнее на площадке.</p></div>
+        <div class="tile reveal-scale" style="--d:160ms"><img src="{img('cable-bnc.jpg')}" alt="BNC"/><div class="num">SDI</div><h3>SDI (BNC)</h3><p>Профессиональное видео. Level A / Level B — разные упаковки 3G-SDI. Длиннее HDMI, надёжнее на площадке.</p></div>
         <div class="tile reveal-scale" style="--d:200ms"><img src="{img('cable-xlr.jpg')}" alt="XLR"/><div class="num">XLR</div><h3>XLR</h3><p>Балансный звуковой интерфейс для микрофонов и линейных сигналов.</p></div>
-        <div class="tile reveal-scale" style="--d:240ms"><img class="fit sq" src="{img('user-rj45.jpg')}" alt="RJ45"/><div class="num">ETH</div><h3>Ethernet</h3><p>Сеть, управление, стрим и другие средства передачи по IP.</p></div>
+        <div class="tile reveal-scale" style="--d:240ms"><img src="{img('cable-rj45.jpg')}" alt="RJ45"/><div class="num">ETH</div><h3>Ethernet</h3><p>Сеть, управление, стрим и другие средства передачи по IP.</p></div>
       </div>
     </section>"""
     )
