@@ -7,7 +7,6 @@
 - v-60hd_main.jpg, img_introduction_0{1,2,3}.jpg
 
 ## Фото площадки / предоставленные материалы (user)
-- user-camera.jpg — камера HDMI/USB
 - user-rj45.jpg — разъёмы RJ45
 - user-hdmi-dvi.jpg — адаптер HDMI–DVI
 - user-hdmi-splitter.jpg — HDMI splitter 1×4

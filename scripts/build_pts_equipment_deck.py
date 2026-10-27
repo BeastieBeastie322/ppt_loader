@@ -17,9 +17,21 @@ def img(name: str) -> str:
     return f"data:image/jpeg;base64,{data}"
 
 
-def photo(name: str, alt: str, credit: str = "", *, contain: bool = False) -> str:
+def photo(
+    name: str,
+    alt: str,
+    credit: str = "",
+    *,
+    contain: bool = False,
+    square: bool = False,
+) -> str:
     cap = f'<div class="photo-credit">{credit}</div>' if credit else ""
-    cls = "photo-panel contain" if contain else "photo-panel"
+    classes = ["photo-panel"]
+    if contain:
+        classes.append("contain")
+    if square:
+        classes.append("square")
+    cls = " ".join(classes)
     return f'''<div class="{cls}">
         <img src="{img(name)}" alt="{alt}" />
         {cap}
@@ -70,6 +82,10 @@ h3{font-size:1rem;margin-bottom:.3rem}
 .photo-panel img{width:100%;height:100%;object-fit:cover;display:block}
 .photo-panel.contain{background:#1a1028;display:flex;align-items:center;justify-content:center;padding:1rem}
 .photo-panel.contain img{width:100%;height:auto;max-height:100%;object-fit:contain}
+.photo-panel.square{aspect-ratio:1/1;width:min(100%,min(58vh,480px));height:auto;min-height:0;max-height:min(62vh,520px);
+  justify-self:center;align-self:center}
+.photo-panel.square.contain{padding:.85rem}
+.photo-panel.square img{width:100%;height:100%;object-fit:contain}
 .photo-credit{position:absolute;left:0;right:0;bottom:0;padding:.35rem .7rem;font-size:.65rem;color:rgba(255,255,255,.7);
   background:linear-gradient(transparent,rgba(0,0,0,.75))}
 .grid{display:grid;gap:.85rem}
@@ -80,6 +96,8 @@ h3{font-size:1rem;margin-bottom:.3rem}
 .tile .num{font-family:Unbounded,sans-serif;color:var(--accent);font-size:.72rem;letter-spacing:.08em;margin-bottom:.4rem}
 .tile p,.list-plain li{color:var(--muted);font-size:.92rem;line-height:1.4}
 .tile img{width:100%;height:110px;object-fit:cover;border-radius:10px;margin-bottom:.65rem;border:1px solid var(--line)}
+.tile img.sq{aspect-ratio:1/1;width:min(100%,180px);height:auto;max-height:180px;object-fit:contain;
+  background:#12081c;display:block;margin:0 auto .65rem}
 .big-list{display:flex;flex-direction:column;gap:.55rem}
 .big-list .item{display:grid;grid-template-columns:auto 1fr;gap:.85rem;align-items:start;padding:.75rem .9rem;
   border:1px solid var(--line);border-radius:12px;background:rgba(36,18,58,.45)}
@@ -121,6 +139,7 @@ h3{font-size:1rem;margin-bottom:.3rem}
 @media (max-width:980px){
   .slide.split{grid-template-columns:1fr;overflow:auto;justify-content:flex-start;padding-top:1.2rem}
   .photo-panel{min-height:220px;max-height:34vh}
+  .photo-panel.square{width:min(100%,min(34vh,280px));max-height:34vh;min-height:0}
   .pipeline,.grid-4{grid-template-columns:1fr 1fr}
   .pipe::after{display:none}
 }
@@ -142,6 +161,7 @@ h3{font-size:1rem;margin-bottom:.3rem}
 .answer-box h3{margin-bottom:.45rem}
 .tile .cap{font-family:Unbounded,sans-serif;font-size:.72rem;color:var(--accent-soft);letter-spacing:.05em;text-transform:uppercase;margin:.15rem 0 .45rem}
 .tile img.fit{object-fit:contain;background:#12081c;height:130px}
+.tile img.fit.sq{aspect-ratio:1/1;width:min(100%,200px);height:auto;max-height:200px;margin:0 auto .65rem}
 """
 
 JS = r"""
@@ -237,7 +257,7 @@ def build() -> None:
         </ul>
         <div class="note reveal" style="--d:220ms"><strong>В первую очередь проверяем здесь:</strong> формат, выход и другие параметры источника.</div>
       </div>
-      {photo("user-camera.jpg", "Камера", "", contain=True)}
+      {photo("cam-tripod.jpg", "Камера на штативе", "Wikimedia Commons · Blackmagic URSA")}
     </section>"""
     )
 
@@ -308,7 +328,7 @@ def build() -> None:
         <div class="tile reveal-scale" style="--d:120ms"><img src="{img('cable-hdmi-plug.jpg')}" alt="HDMI"/><div class="num">HDMI</div><h3>HDMI</h3><p>Бытовой/компьютерный видео+звук. Короткие линии, чувствителен к качеству кабеля.</p></div>
         <div class="tile reveal-scale" style="--d:160ms"><img src="{img('bnc.jpg')}" alt="BNC"/><div class="num">SDI</div><h3>SDI (BNC)</h3><p>Профессиональное видео. Level A / Level B — разные упаковки 3G-SDI. Длиннее HDMI, надёжнее на площадке.</p></div>
         <div class="tile reveal-scale" style="--d:200ms"><img src="{img('cable-xlr.jpg')}" alt="XLR"/><div class="num">XLR</div><h3>XLR</h3><p>Балансный звуковой интерфейс для микрофонов и линейных сигналов.</p></div>
-        <div class="tile reveal-scale" style="--d:240ms"><img class="fit" src="{img('user-rj45.jpg')}" alt="RJ45"/><div class="num">ETH</div><h3>Ethernet</h3><p>Сеть, управление, стрим и другие средства передачи по IP.</p></div>
+        <div class="tile reveal-scale" style="--d:240ms"><img class="fit sq" src="{img('user-rj45.jpg')}" alt="RJ45"/><div class="num">ETH</div><h3>Ethernet</h3><p>Сеть, управление, стрим и другие средства передачи по IP.</p></div>
       </div>
     </section>"""
     )
@@ -363,7 +383,7 @@ def build() -> None:
         </ul>
         <div class="note reveal" style="--d:220ms"><strong>Ошибка новичка:</strong> ожидать от адаптера работу конвертера стандартов.</div>
       </div>
-      {photo("user-hdmi-dvi.jpg", "Адаптер HDMI–DVI", "", contain=True)}
+      {photo("user-hdmi-dvi.jpg", "Адаптер HDMI–DVI", "", contain=True, square=True)}
     </section>"""
     )
 
@@ -396,7 +416,7 @@ def build() -> None:
           <li><strong>Пассивные разветвители</strong> делят энергию сигнала между несколькими выходами и поэтому менее предпочтительны в эфирном тракте, чем активные устройства распределения</li>
         </ul>
       </div>
-      {photo("user-bnc-barrel.jpg", "BNC barrel", "", contain=True)}
+      {photo("user-bnc-barrel.jpg", "BNC barrel", "", contain=True, square=True)}
     </section>"""
     )
 
@@ -416,8 +436,8 @@ def build() -> None:
         <div class="box"><strong>Потребители</strong>микшер / запись / превью</div>
       </div>
       <div class="grid grid-2" style="margin-top:1rem">
-        <div class="tile reveal-scale" style="--d:200ms"><img src="{img('cam-bmd.jpg')}" alt="камера"/><h3>Почему так</h3><p>Длинные HDMI-линии на площадке менее стабильны. SDI обеспечивает большую дальность и удобные разъёмы BNC.</p></div>
-        <div class="tile reveal-scale" style="--d:260ms"><img src="{img('bmd-converters.jpg')}" alt="конвертер"/><h3>Где ошибаются</h3><p>Ставят адаптер вместо конвертера; забывают питание конвертера; путают параметры сигнала.</p></div>
+        <div class="tile reveal-scale" style="--d:200ms"><h3>Почему так</h3><p>Длинные HDMI-линии на площадке менее стабильны. SDI обеспечивает большую дальность и удобные разъёмы BNC.</p></div>
+        <div class="tile reveal-scale" style="--d:260ms"><h3>Где ошибаются</h3><p>Ставят адаптер вместо конвертера; забывают питание конвертера; путают параметры сигнала.</p></div>
       </div>
     </section>"""
     )
@@ -506,14 +526,14 @@ def build() -> None:
       <div class="grid grid-2">
         <div class="tile reveal-scale" style="--d:120ms">
           <div class="cap">USB capture — внешний бокс</div>
-          <img class="fit" src="{img('user-capture-usb.jpg')}" alt="USB capture"/>
+          <img class="fit sq" src="{img('user-capture-usb.jpg')}" alt="USB capture"/>
           <div class="num">USB</div>
           <h3>Внешняя карта / бокс USB</h3>
           <p>Подключается к порту USB. Удобна для ноутбука. Полоса делится с другими устройствами; стабильность зависит от чипа и драйвера.</p>
         </div>
         <div class="tile reveal-scale" style="--d:180ms">
           <div class="cap">PCIe capture — плата внутрь ПК</div>
-          <img class="fit" src="{img('user-capture-pcie.jpg')}" alt="PCIe capture"/>
+          <img class="fit sq" src="{img('user-capture-pcie.jpg')}" alt="PCIe capture"/>
           <div class="num">PCIe</div>
           <h3>Внутренняя плата PCIe</h3>
           <p>Устанавливается в слот системной платы (линии x4/x8/x16). Выше запас по полосе, удобнее многоканальные входы.</p>
@@ -532,13 +552,13 @@ def build() -> None:
       <div class="grid grid-2">
         <div class="tile reveal-scale" style="--d:120ms">
           <div class="cap">Внешний бокс вывода</div>
-          <img class="fit" src="{img('user-ultrastudio-monitor.jpg')}" alt="UltraStudio Monitor 3G"/>
+          <img class="fit sq" src="{img('user-ultrastudio-monitor.jpg')}" alt="UltraStudio Monitor 3G"/>
           <h3>Blackmagic UltraStudio Monitor 3G</h3>
           <p>Внешнее устройство: принимает программу со станции и отдаёт её в SDI/HDMI эфирного тракта или на контрольный монитор.</p>
         </div>
         <div class="tile reveal-scale" style="--d:180ms">
           <div class="cap">Внутренняя PCIe-плата (SDI + HDMI)</div>
-          <img class="fit" src="{img('user-pcie-sdi-hdmi.jpg')}" alt="PCIe SDI HDMI"/>
+          <img class="fit sq" src="{img('user-pcie-sdi-hdmi.jpg')}" alt="PCIe SDI HDMI"/>
           <h3>PCIe SDI + HDMI</h3>
           <p>Плата в слот ПК с разъёмами SDI и HDMI. Типовая роль — захват и/или playback в профессиональный тракт.</p>
         </div>
