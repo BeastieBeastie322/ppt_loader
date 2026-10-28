@@ -4,11 +4,11 @@ from pathlib import Path
 import zipfile
 from playwright.sync_api import sync_playwright
 
-ROOT = Path("/workspace")
-HTML = ROOT / "PTS-vvodnoe.html"
-OUT = ROOT / "slides-static"
+TOPIC = Path(__file__).resolve().parents[1]
+HTML = TOPIC / "PTS-vvodnoe.html"
+OUT = TOPIC / "slides-static"
 ZIP = Path("/opt/cursor/artifacts/PTS-vvodnoe-slides.zip")
-ZIP_REPO = ROOT / "PTS-vvodnoe-slides.zip"
+ZIP_REPO = TOPIC / "PTS-vvodnoe-slides.zip"
 
 OUT.mkdir(parents=True, exist_ok=True)
 ZIP.parent.mkdir(parents=True, exist_ok=True)
