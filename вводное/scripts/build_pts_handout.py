@@ -22,7 +22,7 @@ FONT_BOLD = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
 pdfmetrics.registerFont(TTFont("Body", FONT_REG))
 pdfmetrics.registerFont(TTFont("BodyBold", FONT_BOLD))
 
-OUT = Path("/workspace/PTS_Obshchiy_kurs_vvodnoe.pdf")
+OUT = Path(__file__).resolve().parents[1] / "PTS_Obshchiy_kurs_vvodnoe.pdf"
 
 
 def styles():

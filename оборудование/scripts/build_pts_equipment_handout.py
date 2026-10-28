@@ -13,9 +13,9 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import HRFlowable, Paragraph, SimpleDocTemplate, Spacer
 
-ROOT = Path(__file__).resolve().parents[1]
-OUT_PDF = ROOT / "PTS_Oborudovanie_konspekt.pdf"
-OUT_MD = ROOT / "PTS_Oborudovanie_konspekt.md"
+TOPIC = Path(__file__).resolve().parents[1]
+OUT_PDF = TOPIC / "PTS_Oborudovanie_konspekt.pdf"
+OUT_MD = TOPIC / "PTS_Oborudovanie_konspekt.md"
 
 FONT_REG = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
 FONT_BOLD = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"

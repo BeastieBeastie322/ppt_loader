@@ -6,9 +6,9 @@ from __future__ import annotations
 import base64
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-ASSETS = ROOT / "assets" / "equipment"
-OUT = ROOT / "PTS-oborudovanie.html"
+TOPIC = Path(__file__).resolve().parents[1]
+ASSETS = TOPIC / "assets" / "equipment"
+OUT = TOPIC / "PTS-oborudovanie.html"
 
 
 def img(name: str) -> str:
